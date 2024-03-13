@@ -1,0 +1,175 @@
+
+
+body {
+    background-color: #1a2035;
+    color: #fff; 
+    font: Helvetica;
+  }
+.sidebar{
+    background-color: #486581;
+}
+.sidebar .nav-link {
+    color: #bcccdc; 
+}
+.sidebar .nav-link.active {
+    color: #829ab1;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #202940;
+    margin-bottom: 16px; /* Light gray background color, you can change it */
+}
+
+.header-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff; /* Black color for title, you can change it */
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa; /* Light gray background color, same as header */
+    padding: 10px 20px;
+}
+
+.header-icon {
+    margin-left: 10px;
+    font-size: 20px;
+    color: #555; /* Dark gray color for icons, you can change it */
+    cursor: pointer;
+}
+
+.header-icon:hover {
+    color: #000; /* Hover color for icons, you can change it */
+}
+
+/* box section */
+.box{
+    border-radius: 16px;
+    overflow: auto;
+    background-color: #202940;
+    padding: 32px;
+    margin: 24px;
+}
+
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 16px;
+    background-color: #486581;
+    margin-top: 24px;
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+
+.row {
+    display: flex;
+}
+
+.row > .col-4 {
+    display: flex;
+    flex-direction: column;
+}
+
+.row > .col-8 {
+    display: flex;
+    flex-direction: column;
+}
+
+.box {
+    flex: 1;
+}
+
+.row-card-no-pd {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 24px;
+    background-color: #486581;
+    position: relative;
+    border-radius: 16px;
+    border-right: 1px solid #000; /* Add a line on the right side */    
+}
+
+.single-card{
+    border-right: 1px solid #000; /* Add a line on the right side */
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.icon-b {
+    width: 100%;
+    height: 100%;
+    font-size: 2.2em;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.col-7 {
+    -ms-flex: 0 0 58.333333%;
+    flex: 0 0 58.333333%;
+    max-width: 58.333333%;
+}
+
+
+.col-sm-6 {
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-md-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+
+table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+}
+
+/* stats style*/
+.col-stats {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    font-size: 14;
+    height: 100%; /* This ensures that the space is distributed over the entire height of the container */
+}
+
+/* inventory style */
+
+.invbox{
+    padding: 24px;
+
+}
+
+.invtable {
+    width: inherit;
+    border-collapse: collapse;
+    color: #fff;
+}
+
+.table-hover tbody tr:hover {
+    background-color: red;
+}
+
+/* Buttons */
+.button{
+    background-color: #1572e8;
+    color: #fff;
+} 

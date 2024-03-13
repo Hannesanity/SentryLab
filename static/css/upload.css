@@ -1,0 +1,38 @@
+.uploadbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 900px;
+    border: 2px dashed #aaa;
+    border-radius: 10px;
+    margin: auto;
+    padding: 20px;
+}
+
+.upload-row {
+    display: flex;
+    justify-content: center; /* aligns items horizontally in the center */
+    align-items: center; /* aligns items vertically in the center */
+    height: 100vh; /* takes up the full height of the viewport */
+}
+.drag-drop-area {
+    text-align: center;
+    padding: 50px;
+    cursor: pointer;
+}
+
+.upload-icon {
+    font-size: 50px;
+}
+
+.upload-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #5762D5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

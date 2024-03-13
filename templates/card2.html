@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predictive Maintenance Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/sidenav.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="./css/calendar.css">
+    <link rel="stylesheet" href="./css/card.css">
+    <style>
+        /* Add your CSS here */
+    </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="container-fluid">
+      <div class="row">
+          <!-- Sidebar -->
+          <div id="mySidenav" class="sidenav">
+              <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+              <a href="#">Home</a>
+              <a href="#">Main Dashboard</a>
+              <a href="#">Predictions</a>
+              <a href="#">Equipment Health Monitoring</a>
+              <a href="#">Inventory</a>
+              <a href="#">Calendar</a>
+              <a href="card.html">Equipment Summary</a>
+          </div>
+
+          <!-- Main Content -->
+          <div class="col-12 main">
+              <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+              <h2>Dashboard</h2>
+              <div class="row">
+                  <div class="col-md-4 col-lg-4 d-flex">
+                    <div class="box">
+                        <h4>Schedules</h4>
+                        <div class="row cardrow">
+                            <div class="col-6 d-flex">
+                                <div class="card bg-primary equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Next equipment maintenance</h5>
+                                        <h5 class="card-text"><br>Item/Serial/Brand</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <div class="card bg-primary equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Equipment maintenance date</h5>
+                                        <h5 class="card-text"><br>Date</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                              <div class="card bg-primary equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Recent equipment maintenance</h5>
+                                        <h5 class="card-text"><br>Item/Serial/Brand</h5>
+                                    </div>
+                              </div>
+                          </div>
+                          <div class="col-6 d-flex">
+                              <div class="card bg-primary equipcard">
+                                <div class="card-body">
+                                    <h5 class="card-title">Recent maintenance date</h5>
+                                    <h5 class="card-text"><br>Date</h5>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 d-flex">
+                      <div class="box">
+                          <h4>Equipment Status</h4>
+                          <div class="row cardrow">
+                              <div class="col-6 d-flex">
+                                  <div class="card bg-info equipcard">
+                                      <div class="card-body">
+                                          <h5 class="card-title">Total Equipment</h5>
+                                          <h5 class="card-text"><br>10</h5>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-6 d-flex">
+                                  <div class="card bg-info equipcard">
+                                      <div class="card-body">
+                                          <h5 class="card-title">Operational Equipment</h5>
+                                          <h5 class="card-text"><br>6</h5>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-6 d-flex">
+                                <div class="card bg-info equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Non-Operational Equipment</h5>
+                                        <h5 class="card-text"><br>4</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <div class="card bg-info equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total Stable Equipment</h5>
+                                        <h5 class="card-text"><br>6</h5>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 d-flex">
+                      <div class="box">
+                          <h4>Preventive Maintenance Schedules</h4>
+                          <div class="row cardrow">
+                              <div class="col-6 d-flex">
+                                  <div class="card bg-success equipcard">
+                                      <div class="card-body">
+                                          <h5 class="card-title">Total Equipment</h5>
+                                          <h5 class="card-text"><br>10</h5>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-6 d-flex">
+                                  <div class="card bg-success equipcard">
+                                      <div class="card-body">
+                                          <h5 class="card-title">Operational Equipment</h5>
+                                          <h5 class="card-text"><br>6</h5>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-6 d-flex">
+                                <div class="card bg-success equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Non-Operational Equipment</h5>
+                                        <h5 class="card-text"><br>4</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <div class="card bg-success equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total Stable Equipment</h5>
+                                        <h5 class="card-text"><br>6</h5>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-4 tribox d-flex">
+                      <div class="box">
+                      </div>
+                  </div>
+                  <div class="col-8 thirdbox d-flex">
+                      <!-- Third box content goes here -->
+                      <div class="calendar" id="calendar-app">
+                          <div class="calendar--day-view" id="day-view">
+                              <span class="day-view-exit" id="day-view-exit">&times;</span>
+                              <span class="day-view-date" id="day-view-date">MAY 29 2016</span>
+                              <div class="day-view-content">
+                                  <div class="day-highlight">
+                                      You <span class="day-events" id="day-events">had no events for today</span>. &nbsp; <span tabindex="0" onkeyup="if(event.keyCode != 13) return; this.click();" class="day-events-link" id="add-event" data-date>Add a new event?</span>
+                                  </div>
+                                  <div class="day-add-event" id="add-day-event-box" data-active="false">
+                                      <div class="row">
+                                          <div class="half">
+                                              <label class="add-event-label">
+                                                  Name of event
+                                                  <input type="text" class="add-event-edit add-event-edit--long" placeholder="New event" id="input-add-event-name">
+                                              </label>
+                                          </div>
+                                          <div class="qtr">
+                                              <label class="add-event-label">
+                                                  Start Time
+                                                  <input type="text" class="add-event-edit" placeholder="8:15" id="input-add-event-start-time" data-options="1,2,3,4,5,6,7,8,9,10,11,12" data-format="datetime">
+                                                  <input type="text" class="add-event-edit" placeholder="am" id="input-add-event-start-ampm" data-options="a,p,am,pm">
+                                              </label>
+                                          </div>
+                                          <div class="qtr">
+                                              <label class="add-event-label">
+                                                  End Time
+                                                  <input type="text" class="add-event-edit" placeholder="9" id="input-add-event-end-time" data-options="1,2,3,4,5,6,7,8,9,10,11,12" data-format="datetime">
+                                                  <input type="text" class="add-event-edit" placeholder="am" id="input-add-event-end-ampm" data-options="a,p,am,pm">
+                                              </label>
+                                          </div>
+                                          <div class="half">
+                                              <a onkeyup="if(event.keyCode != 13) return; this.click();" tabindex="0" id="add-event-save" class="event-btn--save event-btn">save</a>
+                                              <a tabindex="0" id="add-event-cancel" class="event-btn--cancel event-btn">cancel</a>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div id="day-events-list" class="day-events-list">
+                                  </div>
+                                  <div class="day-inspiration-quote" id="inspirational-quote">
+                                      Every child is an artist. The problem is how to remain an artist once he grows up. –Pablo Picasso
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="calendar--view" id="calendar-view">
+                              <div class="cview__month">
+                                  <span class="cview__month-last" id="calendar-month-last">Apr</span>
+                                  <span class="cview__month-current" id="calendar-month">May</span>
+                                  <span class="cview__month-next" id="calendar-month-next">Jun</span>
+                              </div>
+                              <div class="cview__header">Sun</div>
+                              <div class="cview__header">Mon</div>
+                              <div class="cview__header">Tue</div>
+                              <div class="cview__header">Wed</div>
+                              <div class="cview__header">Thu</div>
+                              <div class="cview__header">Fri</div>
+                              <div class="cview__header">Sat</div>
+                              <div class="calendar--view" id="dates">
+                              </div>
+                          </div>
+                          <div class="footer">
+                              <span><span id="footer-date" class="footer__link">Today is May 30</span></span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/sidenav.js"></script>
+  <script src="js/graph.js"></script>
+</body>
+</html>

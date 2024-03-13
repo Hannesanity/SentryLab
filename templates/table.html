@@ -1,0 +1,86 @@
+<html>
+<head>
+    {% extends 'base.html' %}
+    {% block title %}Predictive Maintenance Dashboard - Index{% endblock %}
+</head>
+<body>
+    {% block content %}
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">Home</a>
+                <a href="#">Main Dashboard</a>
+                <a href="#">Predictions</a>
+                <a href="#">Equipment Health Monitoring</a>
+                <a href="#">Inventory</a>
+                <a href="#">Calendar</a>
+                <a href="card.html">Equipment Summary</a>
+            </div>
+            <!-- Main Content -->
+            <div class="col-12">
+                <h2>Inventory</h2>
+                <div class="row">
+                    <div class="col-8 firstbox ">
+                        <!-- Third box content goes here -->
+                        <div class = "box">
+                            <h2>Active Items</h2>
+                            <table class="table table-striped mt-3" id="active-table-body">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Item No.</th>
+                                        <th scope="col">Item Name</th>
+                                        <th scope="col">Unique ID</th>
+                                        <th scope="col">Location</th>
+                                        <th scope="col">Brand</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Inventory data will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-4 secondbox">
+                        <div class = "box">
+                            <!-- Graph goes here -->
+                            <div class = "box">
+            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 thirdbox">
+                        <!-- Third box content goes here -->
+                        <div class = "box">
+                            <h2>Inactive Items</h2>
+                            <table class="table table-striped mt-3" id="inactive-table-body">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Item No.</th>
+                                        <th scope="col">Item Name</th>
+                                        <th scope="col">Unique ID</th>
+                                        <th scope="col">Location</th>
+                                        <th scope="col">Brand</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Inventory data will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{ url_for('static', filename='js/table.js') }}"></script>
+  {% endblock %}
+</body>
+</html>

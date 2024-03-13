@@ -1,0 +1,18 @@
+.card{
+    text-align: center;
+}
+.cardrow {
+    display: flex;
+    justify-content: center; /* aligns items horizontally in the center */
+    align-items: stretch; /* makes the height of the child elements (cards) the same */
+}
+.equipcard{
+    margin-bottom: 24px;
+    background-color: #202940;
+}
+
+.cardrow .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

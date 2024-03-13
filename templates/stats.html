@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predictive Maintenance Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/sidenav.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="./css/calendar.css">
+    <link rel="stylesheet" href="./css/upload.css">
+    <link rel="stylesheet" href="./css/modal.css">
+    <style>
+        /* Add your CSS here */
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">Home</a>
+                <a href="#">Main Dashboard</a>
+                <a href="#">Predictions</a>
+                <a href="#">Equipment Health Monitoring</a>
+                <a href="#">Inventory</a>
+                <a href="#">Calendar</a>
+                <a href="card.html">Equipment Summary</a>
+            </div>
+        </div>
+        <div class="header">
+            <!-- Title on the left side -->
+            <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+            <h1 class="header-title">Predictive Maintenance Statistics</h1>
+            <!-- Placeholder icons on the right side -->
+            <div class="header-icons">
+                <!-- Example icons, you can replace them with your preferred icons or use icon fonts -->
+                <i class="fa fa-search header-icon" aria-hidden="true"></i>
+                <i class="fa fa-bell header-icon" aria-hidden="true"></i>
+                <i class="fa fa-user header-icon" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <div class="row">
+                <div class="col-4 firstbox ">
+                    <div class = "box">
+                        <!-- Dashboard goes here -->
+                        <div class="row cardrow">
+                            <div class="col-6 d-flex">
+                                <div class="card bg-success equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total Equipment</h5>
+                                        <h5 class="card-text"><br>10</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <div class="card bg-success equipcard">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Operational Equipment</h5>
+                                        <h5 class="card-text"><br>6</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                              <div class="card bg-success equipcard">
+                                  <div class="card-body">
+                                      <h5 class="card-title">Non-Operational Equipment</h5>
+                                      <h5 class="card-text"><br>4</h5>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-6 d-flex">
+                              <div class="card bg-success equipcard">
+                                  <div class="card-body">
+                                      <h5 class="card-title">Total Stable Equipment</h5>
+                                      <h5 class="card-text"><br>6</h5>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>  
+                    </div>
+                </div>
+                <div class="col-8 secondbox">
+                    <div class = "box">
+                        <!-- Graph goes here -->
+                        <h3>Maintenance History</h3>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Equipment</th>
+                                    <th>Maintenance Date</th>
+                                    <th>Type of Maintenance</th>
+                                    <th>Outcome</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Each row represents a maintenance activity -->
+                                <tr>
+                                    <td>Equipment 1</td>
+                                    <td>2024-02-20</td>
+                                    <td>Routine Check</td>
+                                    <td>Successful</td>
+                                </tr>
+                                <!-- More rows go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Equipment Status and Maintenance Overview Section -->
+            <div class="row">
+                <div class="col-6 d-flex">
+                    <div class="box">
+                        <div id="chart-container">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 d-flex">
+                    <div class="box">
+                        <canvas id="myChart" style="width:100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Order Analysis and Downtime Analysis Section -->
+            <div class="row">
+                <div class="col-6 d-flex">
+                    <div class="box">
+                        <h3>Predictive Maintenance Schedules</h3>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Equipment</th>
+                                    <th>Next Maintenance Date</th>
+                                    <th>Predicted Issue</th>
+                                    <th>Recommended Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Each row represents a piece of equipment -->
+                                <tr>
+                                    <td>Equipment 1</td>
+                                    <td>2024-03-20</td>
+                                    <td>Overheating</td>
+                                    <td>Check cooling system</td>
+                                </tr>
+                                <!-- More rows go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-6 d-flex">
+                    <div class="box">
+                        <div id="chart-container">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/sidenav.js"></script>
+    <script src="js/graph.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/bargraph.js"></script>
+    <script src="js/piegraph.js"></script>
+    <script src="js/upload.js"></script>
+</body>
+</html>
