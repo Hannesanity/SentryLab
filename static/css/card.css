@@ -43,7 +43,7 @@
 .single-card:hover, .card-body:hover {
     background-color: #1e74b4; /* Change the background color on hover */
     border: 4px solid transparent; /* Define the border size and set it to transparent */
-    border-image: linear-gradient(#b2c8e1, rgba(30, 116, 180, 0)) 1; /* Apply the gradient */
+    border-image: linear-gradient(#253343, rgba(30, 116, 180, 0)) 1; /* Apply the gradient */
 }
 
 .infocard{

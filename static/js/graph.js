@@ -94,8 +94,8 @@ MonthStats = new Chart(ctx, {
         datasets: [{
             label: 'Total Quantity Borrowed per Month',
             data: [],  // Initialize with empty data
-            backgroundColor: '#ffea7e', // Updated color
-            borderColor: 'rgba(255, 234, 126, 1)', // Updated color
+            backgroundColor: '#5A81B2', // Updated color
+            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
             borderWidth: 1
         }]
     },
@@ -130,8 +130,8 @@ var totalDurationPerMonthChart = new Chart(ctx2, {
         datasets: [{
             label: 'Total Duration of Equipment Usage Per Month',
             data: [],  // Initialize with empty data
-            backgroundColor: '#ffea7e', // Updated color
-            borderColor: 'rgba(255, 234, 126, 1)', // Updated color
+            backgroundColor: '#5A81B2', // Updated color
+            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
             borderWidth: 1
         }]
     },
@@ -162,8 +162,8 @@ var peakHoursOfUsageChart = new Chart(ctx3, {
         datasets: [{
             label: 'Peak Hours of Usage',
             data: [],  // Initialize with empty data
-            backgroundColor: '#ffea7e', // Updated color
-            borderColor: 'rgba(255, 234, 126, 1)', // Updated color
+            backgroundColor: '#5A81B2', // Updated color
+            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
             borderWidth: 1
         }]
     },
@@ -193,8 +193,8 @@ var usagePatternsOverDaysChart = new Chart(ctx4, {
         datasets: [{
             label: 'Usage Patterns Over Days of the Week',
             data: [],  // Initialize with empty data
-            backgroundColor: '#ffea7e', // Updated color
-            borderColor: 'rgba(255, 234, 126, 1)', // Updated color
+            backgroundColor: '#5A81B2', // Updated color
+            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
             borderWidth: 1
         }]
     },
@@ -224,8 +224,8 @@ var borrowingPatternsChart = new Chart(ctx5, {
         datasets: [{
             label: 'Idle Time (1 = Idle)',
             data: [],  // Initialize with empty data
-            backgroundColor: '#ffea7e', // Updated color
-            borderColor: 'rgba(255, 234, 126, 1)', // Updated color
+            backgroundColor: '#5A81B2', // Updated color
+            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
             borderWidth: 1
         }]
     },
@@ -254,8 +254,8 @@ var activeBorrowingsChart = new Chart(ctx6, {
         datasets: [{
             label: 'Active Borrowings',
             data: [3, 4, 5, 8, 10, 9, 9, 0, 4], // Replace with your actual data
-            backgroundColor: '#ffea7e', // Updated color
-            borderColor: 'rgba(255, 234, 126, 1)', // Updated color
+            backgroundColor: '#5A81B2', // Updated color
+            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
             borderWidth: 1
         }]
     },

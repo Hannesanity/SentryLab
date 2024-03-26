@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #6a94c5;
+    background-color: #f1f1f1;
     color: #fff; 
     font-family: Oswald, Arial;
   }
@@ -233,6 +233,5 @@ table {
 /* Hover effect */
 .form-select:hover {
     background-color: #1e74b4; /* Background color on hover */
-    border-color: #b2c8e1; /* Border color on hover */
-    border-image: linear-gradient(#b2c8e1, rgba(30, 116, 180, 0)) 1; /* Apply the gradient */
+    border-image: linear-gradient(#253343, rgba(30, 116, 180, 0)) 1; /* Apply the gradient */
 }
