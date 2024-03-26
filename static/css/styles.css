@@ -1,12 +1,17 @@
-
+@font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    src: url('path/to/Oswald-Regular.ttf') format('truetype'); /* Replace 'path/to/Oswald-Regular.ttf' with the actual path to your font file */
+}
 
 body {
-    background-color: #1a2035;
+    background-color: #6a94c5;
     color: #fff; 
-    font: Helvetica;
+    font-family: Oswald, Arial;
   }
 .sidebar{
-    background-color: #486581;
+    background-color: #416294;
 }
 .sidebar .nav-link {
     color: #bcccdc; 
@@ -15,13 +20,63 @@ body {
     color: #829ab1;
 }
 
+/* Base styles for sidenav */
+.sidenav {
+    width: 0px;
+    transition: 0.5s;
+    /* other styles */
+}
+
+/* Styles for main content when sidenav is open */
+.main-content-expanded {
+    margin-left: 250px;
+    /* other styles */
+}
+
+.sidenav-open-button {
+    display: none; /* Hide open button when sidenav is open */
+}
+
+@media screen and (max-width: 768px) {
+    .sidenav-open-button {
+        display: block; /* Show open button on smaller screens */
+    }
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+    .sidenav {
+        width: 100px; /* Smaller width for sidenav */
+    }
+
+    .main-content-expanded {
+        margin-left: 100px; /* Adjust main content margin */
+    }
+}
+
+.overlay-content {
+    display: none; /* Initially hidden */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5); /* Semi-transparent background */
+    z-index: 1; /* Ensure it's above other content */
+}
+
+/* Show overlay when sidebar is open */
+.sidenav-open .overlay-content {
+    display: block;
+}
+
 /* Header */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #202940;
+    background-color: #416294;
     margin-bottom: 16px; /* Light gray background color, you can change it */
 }
 
@@ -54,7 +109,7 @@ body {
 .box{
     border-radius: 16px;
     overflow: auto;
-    background-color: #202940;
+    background-color: #303861;
     padding: 32px;
     margin: 24px;
 }
@@ -64,7 +119,7 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 16px;
-    background-color: #486581;
+    background-color: #303861;
     margin-top: 24px;
     margin-left: 16px;
     margin-right: 16px;
@@ -93,21 +148,6 @@ body {
     flex: 1;
 }
 
-.row-card-no-pd {
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-top: 24px;
-    background-color: #486581;
-    position: relative;
-    border-radius: 16px;
-    border-right: 1px solid #000; /* Add a line on the right side */    
-}
-
-.single-card{
-    border-right: 1px solid #000; /* Add a line on the right side */
-    padding-top: 16px;
-    padding-bottom: 16px;
-}
 
 .icon-b {
     width: 100%;
@@ -173,3 +213,26 @@ table {
     background-color: #1572e8;
     color: #fff;
 } 
+
+.combobox{
+    margin: 24px;
+}
+
+/* combobox */
+.form-select {
+    border: 4px solid transparent; /* Border color */
+    color: #fff;
+    background-color: #416294; /* Background color */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    border-radius: 16px;
+}
+.form-select option {
+    background-color: #416294; /* Default background color */
+    color: #fff;
+}
+/* Hover effect */
+.form-select:hover {
+    background-color: #1e74b4; /* Background color on hover */
+    border-color: #b2c8e1; /* Border color on hover */
+    border-image: linear-gradient(#b2c8e1, rgba(30, 116, 180, 0)) 1; /* Apply the gradient */
+}

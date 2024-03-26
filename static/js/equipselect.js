@@ -11,3 +11,5 @@ document.getElementById("equipment-select").addEventListener("change", function(
         document.getElementById("avg-duration").textContent = data.avg_duration;
       });
   });
+
+  

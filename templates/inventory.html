@@ -1,22 +1,10 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Predictive Maintenance Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"/>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="./css/sidenav.css">
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/calendar.css">
-    <link rel="stylesheet" href="./css/modal.css">
-    
-    
-    <style>
-        /* Add your CSS here */
-    </style>
+    {% extends 'base.html' %}
+    {% block title %}Predictive Maintenance Dashboard - Index{% endblock %}
 </head>
 <body>
+    {% block content %}
     <!-- Sidebar -->
     <div class="container-fluid">
         <div class="row">
@@ -30,82 +18,80 @@
                 <a href="#">Inventory</a>
                 <a href="#">Calendar</a>
                 <a href="card.html">Equipment Summary</a>
-                                
             </div>
-
             <!-- Main Content -->
             <div class="col-12">
-                <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                <div class="header">
+                    <!-- Title on the left side -->
+                    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>
+                    <!-- Placeholder icons on the right side -->
+                    <div class="header-icons">
+                        
+                    </div>
+                </div>
                 <h2>Inventory</h2>
                 <div class="row">
-                    <div class="col-12">
-                        <div class="box invbox">
-                            <table id="dataTable" class="table table-striped table-hover invtable">
+                    <div class="col-8 firstbox ">
+                        <!-- Third box content goes here -->
+                        <div class = "box">
+                            <h2>Active Items</h2>
+                            <table class="table table-striped mt-3" id="equipstats">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th>Equipment Name</th>
+                                        <th>Times Borrowed</th>
+                                        <th>Total Duration (hrs)</th>
+                                        <th>Average Duration (hrs)</th>
+                                        <th>Active/Inactive Status</th>
+                                        <th>Last Borrowed Date</th>
+                                        <th>Maintenance Frequency</th>
+                                        <th>Utilization per day (%)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011-04-25</td>
-                                        <td>$320,800</td>
-                                    </tr>
-                                    <!-- Additional rows go here -->
+                                    <!-- Inventory data will be inserted here -->
                                 </tbody>
                             </table>
-                            <input type="file" id="fileInput" accept=".csv" style="display: none;">
-                            <button id="uploadButton" class="btn btn-primary">Upload CSV</button>  
-                            <!-- HTML -->
-                            <button id="modalButton" class="btn btn-primary">Add Equipment</button>
-                            <div id="modal" class="modal">
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <form id="addEquipmentForm">
-                                <label for="equipmentName">Equipment Name:</label><br>
-                                <input type="text" id="equipmentName" name="equipmentName"><br>
-                                <label for="serialNumber">Serial Number(s):</label><br>
-                                <input type="text" id="serialNumber" name="serialNumber"><br>
-                                <label for="brand">Brand:</label><br>
-                                <input type="text" id="brand" name="brand"><br>
-                                <label for="quantity">Quantity:</label><br>
-                                <input type="number" id="quantity" name="quantity"><br>
-                                <label for="dateAdded">Date Added:</label><br>
-                                <input type="date" id="dateAdded" name="dateAdded"><br>
-                                <input type="submit" value="Submit">
-                                </form>
+                        </div>
+                    </div>
+                    <div class="col-4 secondbox">
+                        <div class = "box">
+                            <!-- Graph goes here -->
+                            <div class = "box">
+            
                             </div>
-                            </div>
-                      
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 thirdbox">
+                        <!-- Third box content goes here -->
+                        <div class = "box">
+                            <h2>Inactive Items</h2>
+                            <table class="table table-striped mt-3" id="inactive-table-body">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Item No.</th>
+                                        <th scope="col">Item Name</th>
+                                        <th scope="col">Unique ID</th>
+                                        <th scope="col">Location</th>
+                                        <th scope="col">Brand</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Inventory data will be inserted here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
-    <script src="js/calendar.js"></script>
-    <script src="js/sidenav.js"></script>
-    <script src="js/graph.js"></script>
-    <script src="js/upload.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="js/modal.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{ url_for('static', filename='js/table.js') }}"></script>
+  {% endblock %}
 </body>
 </html>

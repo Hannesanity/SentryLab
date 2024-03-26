@@ -1,36 +1,8 @@
-$(document).ready(function() {
-    var inactiveTable = $('#inactive-table-body').DataTable();
-    var activeTable = $('#active-table-body').DataTable();
-
-    $.getJSON('/static/items.json', function(data) {
-        data.forEach(function(item, index) {
-            // Prepare the row data
-            var rowData = [
-                index + 1,
-                item['Item No.'],
-                item['Name'],
-                item['UniqueID'],
-                item['Room'],
-                item['Brand']
-            ];
-
-            // Add the row to the appropriate table
-            if (item.IsActive) {
-                activeTable.row.add(rowData).draw();
-            } else {
-                var rowNode = inactiveTable.row.add(rowData).draw().node();
-                $(rowNode).addClass('inactive-item');
-            }
-        });
-    });
-});
-
-
 
 $(document).ready(function() {
     // Fetch the JSON data and populate the DataTable
     $.getJSON('static/equip.json', function(data) {
-        $('#equipstats').DataTable({
+        $('#equipmentTable').DataTable({
             data: data,
             columns: [
                 { data: 'EQUIPMENT NAME' }, // Matches the JSON key for equipment name

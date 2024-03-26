@@ -1,24 +1,3 @@
-$('#equipment-select').change(function() {
-    var selectedEquipment = $(this).val();
-    console.log('Selected Equipment:', selectedEquipment);  // Log the selected equipment
-
-    $.getJSON('/unique_ids', {
-        equipment_name: selectedEquipment
-    }, function(data) {
-        console.log('Received Data:', data);  // Log the received data
-        var uniqueIdSelect = $('#unique-id-select');
-
-        // Clear the current options
-        uniqueIdSelect.empty();
-
-        // Add the new options
-        $.each(data.unique_ids, function(index, uniqueId) {
-            console.log('Adding option:', uniqueId);  // Log the unique ID being added
-            uniqueIdSelect.append($('<option></option>').attr('value', uniqueId).text(uniqueId));
-        });
-    });
-});
-
 // Define 'data' outside of the fetch promise
 var data;
 
@@ -27,37 +6,66 @@ fetch('/static/stats.json')
     .then(fetchedData => {
         // Assign the fetched data to 'data'
         data = fetchedData;
-        console.log('Fetched Data:', data);  // Log the fetched data
     })
     .catch(error => console.error('Error:', error));
 
-var selectElement = document.getElementById('unique-id-select');  // Changed from 'equipment-select'
 
-// Add an event listener for the 'change' event
-selectElement.addEventListener('change', function() {
-    var selectedUniqueId = selectElement.value;
-    console.log('Selected Unique ID:', selectedUniqueId);  // Log the selected unique ID
 
-    // Find the corresponding data
-    var selectedData = data.find(function(item) {
-        return item['UniqueID'] === selectedUniqueId;
-    });
-    console.log('Selected Data:', selectedData);  // Log the selected data
 
-    // Update the cards
-    if (selectedData) {
-        document.getElementById('total-qty').textContent = selectedData['Frequency'];
-        document.getElementById('avg-duration').textContent = parseFloat(selectedData['Average Duration']).toFixed(2);
-        document.getElementById('total-dur').textContent = parseFloat(selectedData['Total Duration']).toFixed(2);
-        document.getElementById('max-dur').textContent = parseFloat(selectedData['Max Duration']).toFixed(2);
-        document.getElementById('min-dur').textContent = parseFloat(selectedData['Min Duration']).toFixed(2);
-        document.getElementById('lastdate').textContent = parseFloat(selectedData['Last Used Date']).toFixed(2);
-        document.getElementById('correlation').textContent = parseFloat(selectedData['Correlations']).toFixed(2);
-        document.getElementById('outliers').textContent = parseFloat(selectedData['Outliers']).toFixed(2);
+    function updateUniqueIdSelect() {
+        var selectedEquipment = $('#equipment-select').val();
+    
+        $.getJSON('/static/items.json', function(data) {
+            var uniqueIdSelect = $('#unique-id-select');
+    
+            // Clear the current options
+            uniqueIdSelect.empty();
+    
+            // Add the new options
+            $.each(data, function(index, item) {
+                // Check if the item is active and matches the selected equipment
+                if (item.IsActive && item.Name === selectedEquipment) {
+                    uniqueIdSelect.append($('<option></option>').attr('value', item.UniqueID).text(item.UniqueID));
+                }
+            });
+    
+            // Trigger the change event for the unique ID select element
+            uniqueIdSelect.trigger('change');
+        });
     }
-});
+    
+    // Call the function when the equipment changes
+    $('#equipment-select').change(updateUniqueIdSelect);
+    
+    // Call the function when the page loads
+    $(document).ready(updateUniqueIdSelect);
+    
+function updateEquipmentSelect() {
+    $.getJSON('/static/items.json', function(data) {
+        var equipmentSelect = $('#equipment-select');
+
+        // Clear the current options
+        equipmentSelect.empty();
+
+        // Get unique, active equipment names
+        var activeEquipments = [...new Set(data.filter(item => item.IsActive).map(item => item.Name))];
+
+        // Add the new options
+        $.each(activeEquipments, function(index, equipmentName) {
+            equipmentSelect.append($('<option></option>').attr('value', equipmentName).text(equipmentName));
+        });
+
+        // Trigger the change event for the equipment select element
+        equipmentSelect.trigger('change');
+    });
+}
+$(document).ready(updateEquipmentSelect);
+
+    
 
 
+
+/*
 function explain(correlation, outliers) {
     let correlationExplanation = '';
     let outliersExplanation = '';
@@ -94,4 +102,4 @@ let outliersExplanationElement = document.getElementById('outliersExplanation');
 // Insert the explanations into the span elements
 correlationExplanationElement.textContent = explanations.correlationExplanation;
 outliersExplanationElement.textContent = explanations.outliersExplanation;
-
+*/
