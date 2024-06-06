@@ -25,6 +25,13 @@
     color: #303861;
   }
   
+/* Style for the active state */
+  .sidenav .nav-link.active {
+    background-color: #1e74b4; /* Background color for active state */
+    color: #fff; /* Text color for active state */
+    border-left: 4px solid #b2c8e1; /* Left border for active state */
+  }
+
   .sidenav .closebtn {
     position: absolute;
     top: 0;

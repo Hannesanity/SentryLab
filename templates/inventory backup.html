@@ -11,10 +11,13 @@
             <!-- Sidebar -->
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="{{ url_for('equipment') }}">Equipment</a>
-                <a href="{{ url_for('index') }}">Inventory</a>
-                <a href="#" id="updateButton">Update Stats</a>
-                <a href="#" id="trainButton">Train</a>
+                <a href="#">Home</a>
+                <a href="#">Main Dashboard</a>
+                <a href="#">Predictions</a>
+                <a href="#">Equipment Health Monitoring</a>
+                <a href="#">Inventory</a>
+                <a href="#">Calendar</a>
+                <a href="card.html">Equipment Summary</a>
             </div>
             <!-- Main Content -->
             <div class="col-12">
@@ -59,13 +62,16 @@
                                 <a class="nav-link" href="#">Others</a>
                             </li>
                         </ul>
-                    
+                        <form class="form-inline">
+                            <button class="btn my-2 my-sm-0" type="button" id="filterActive">Active</button>
+                            <button class="btn my-2 my-sm-0 ml-2" type="button" id="filterInactive">Inactive</button>
+                        </form>
                     </div>
                 </nav>
 
                 <div class="row">
                     <!-- Room Information Card -->
-                    <div class="col-3" id="roomInfo" >
+                    <div class="col-md-4" id="roomInfo" >
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Room Information</h5>
@@ -79,7 +85,7 @@
                         </div>
                     </div>
                     <!-- Usage Analysis Card -->
-                    <div class="col-3" id="usageAnalysis">
+                    <div class="col-md-4" id="usageAnalysis">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Usage Analysis</h5>
@@ -92,7 +98,7 @@
                         </div>
                     </div>
                     <!-- Duration Analysis Card -->
-                    <div class="col-3" id="durationAnalysis">
+                    <div class="col-md-4" id="durationAnalysis">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Duration Analysis</h5>
@@ -104,7 +110,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-3" id="additionalStats">
+                </div>
+
+                <div class="row">
+                    <!-- Additional Stats Card -->
+                    <div class="col-md-4" id="additionalStats">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Additional Stats</h5>
@@ -116,9 +126,9 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Usage Analysis Card -->
+                    
                 </div>
-
-        
                 <div class="row" data-filter="overall">
                     <div class="col-4">
                         <div class="card equipcard">
@@ -139,6 +149,25 @@
                             <div class="box">
                                 <canvas id="overalldurationMeanChart"></canvas>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8">
+                        <div class="box">
+                            <h4>Equipments List</h4>
+                            <table class="table table-striped mt-3 hover" id="roomstats">
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="statbox">
+                            <h4>Equipment Details</h4>
+                            <p><span id="interpretationList"></span></p>
+                            
+                            <!-- Additional statistics for day here -->
                         </div>
                     </div>
                 </div>
@@ -175,78 +204,26 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="card equipcard">
                             <div class="box">
                                 <canvas id="roomBorrowedChart"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="card equipcard">
                             <div class="box">
                                 <canvas id="roomDurationChart"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="roomAverageChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-8">
-                        <div class="box">
-                            <h4>Equipments List</h4>
-                            <table class="table table-striped mt-3 hover" id="roomstats">
-
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="statbox" style="max-height: 460px;">
-                            <h4>Schedules</h4>
-                            <div id="scheduleDisplay"></div>
-                            <!-- Additional statistics for day here -->
-                        </div>
-                        <div class="statbox" style="max-height: 460px;">
-                            <h4>Equipment Details</h4>
-                            <p><span id="interpretationList"></span></p>
-                            
-                            <!-- Additional statistics for day here -->
-                        </div>
-                    </div>
-                </div>
-
-                <div class="container mt-5">
-                    <div class="row">
-                      <div class="col">
-                        <h3>Status: <span id="statusMessage">Processing...</span></h3>
-                      </div>
-                    </div>
-                  </div>
-                
-                  <div class="progress-container">
-                    <div class="progress">
-                      <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        <span id="progressLabel" class="progress-label">0%</span>
-                      </div>
-                    </div>
-                    <div class="progress-text">Processing...</div>
-                  </div>
-
-                
 
             </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='js/legitcalendar.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="{{ url_for('static', filename='js/table.js') }}"></script>
     <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/roomgraph.js') }}"></script>

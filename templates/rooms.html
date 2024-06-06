@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% extends 'base.html' %}
+    {% block title %}Predictive Maintenance Dashboard - Index{% endblock %}
+</head>
+<body>
+    {% block content %}
+  <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+             <!-- Sidebar -->
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">Home</a>
+                <a href="#">Main Dashboard</a>
+                <a href="#">Predictions</a>
+                <a href="#">Equipment Health Monitoring</a>
+                <a href="#">Inventory</a>
+                <a href="#">Calendar</a>
+                <a href="card.html">Equipment Summary</a>
+            </div>
+             <!-- Main Content -->
+            <div id="main">
+                <div class="header">
+                    <!-- Title on the left side -->
+                    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>
+                    <!-- Placeholder icons on the right side -->
+                    <div class="header-icons">
+                      
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="combobox" style="display: flex; justify-content: space-between;">
+                        <div>
+                            <label for="equipment-select">Equipment Name:</label>
+                            <select id="equipment-select" class="form-select">
+                                {% for equipment_name in equipment_names %}
+                                <option value="{{ equipment_name }}">{{ equipment_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="unique-id-select">Unique ID:</label>
+                            <select id="unique-id-select" class="form-select"></select>
+                        </div>
+                        <div>
+                            <label for="graph-filter-select">Graph Filter:</label>
+                            <select id="graph-filter-select" class="form-select">
+                                <!-- Add options for graph filters here -->
+                                <option value="default">Overall</option>
+                                <option value="filter1">Year</option>
+                                <option value="filter2">Months in a Year</option>
+                                <option value="filter3">Days in a Week</option>
+                                <option value="filter4">Hours in a Day</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row row-card-no-pd">
+                        <!-- first row equipment stats-->
+                        <div class="col-sm-6 col-md-3 single-card">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-b">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-tools" viewBox="0 0 16 16">
+                                            <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <h4><span id="equipment-name"></span></h4>
+                                    <p>Name</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 single-card">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-b">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-hash" viewBox="0 0 16 16">
+                                            <path d="M8.39 12.648a1 1 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1 1 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.51.51 0 0 0-.523-.516.54.54 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532s.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531s.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <h4><span id="equipment-serial"></span></h4>
+                                    <p>Serial Number</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 single-card">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-b">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-tools" viewBox="0 0 16 16">
+                                            <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/>
+                                        </svg>  
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <h4><span id="equipment-brand"></span></h4>
+                                    <p>Brand</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 single-card">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-b">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-stats">
+                                    <h4><span id="equipment-room"></span></h4>
+                                    <p>Room</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="row">
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="yearTotalDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="yearFreq"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="yearUtil"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="yearMinMaxDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="monthQty"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="monthTotalDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="monthUtil"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="monthMinMaxDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="monthFreq"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="weekFreq"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="weekTotalDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="weekMinMaxDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="overallDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="hourIdle"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="hourUptime"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="hourBorrow"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="hourAvgDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="hourOccu"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <!-- Cards -->
+                        <div class="col-md-4 col-lg-4">
+                            <div class="box">
+                                <p class="card-title">Usage Statistics</p>
+                                <div class="row cardrow">
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="total-qty"></span></h4>
+                                                <p class="card-text">Times Borrowed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="avg-duration"></span></h4>
+                                                <p class="card-text">Average Uptime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="total-dur"></span></h4>
+                                                <p class="card-text">Total Uptime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="max-dur"></span></h4>
+                                                <p class="card-text">Peak Uptime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="min-dur"></span></h4>
+                                                <p class="card-text">Lowest Uptime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="late-return"></span></h4>
+                                                <p class="card-text">Late Returns</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 col-lg-4 d-flex">
+                            <div class="box">
+                                <p class="card-title">Usage History</p>
+                                <div class="row cardrow">
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="firstdatebor"></span></h4>
+                                                <p class="card-text">First Date Borrowed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="lastdatebor"></span></h4>
+                                                <p class="card-text">Last Date Borrowed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="firstdateret"></span></h4>
+                                                <p class="card-text">First Date Returned</p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="lastdateret"></span></h4>
+                                                <p class="card-text">Last Date Returned</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 d-flex">
+                            <div class="box">
+                                <p class="card-title">Descriptive Statistics</p>
+                                <div class="row cardrow">
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="median-dur"></span></h4>
+                                                <p class="card-text">Median Duration</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="std-dev-dur"></span></h4>
+                                                <p class="card-text">Standard Deviation for Duration</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="most-freq-day"></span></h4>
+                                                <p class="card-text">Most Frequent Day</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card infocard">
+                                            <div class="card-body">
+                                                <h4><span id="most-freq-month"></span></h4>
+                                                <p class="card-text">Most Frequent Month</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        
+
+                    <div class="row">
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="usagePatternsOverDays"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="borrowingPatterns"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="idleTime"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex">
+                            <div class="card equipcard">
+                                <div class="box">
+                                    <canvas id="YearMinMaxDur"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                    
+                    <div class="row">
+                        <div class="col-md-4 col-lg-4 d-flex">
+                            <div class="box">
+                                <p class="card-title">Other Statistics</p>
+                                <div class="row cardrow">
+                                    <div class="col-6 d-flex">
+                                        <div class="card  infocard">
+                                            <div class="card-body">
+                                                <h4><span id="unique-dates"></span></h4>
+                                                <p class="card-text">Unique Borrowed Days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card  infocard">
+                                            <div class="card-body">
+                                                <h4><span id="range-duration"></span></h4>
+                                                <p class="card-text">Range Duration</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card  infocard">
+                                            <div class="card-body">
+                                                <h4><span id="correlation"></span></h4>
+                                                <p class="card-text">Correlation</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card  infocard">
+                                            <div class="card-body">
+                                                <h4><span id="outliers"></span></h4>
+                                                <p class="card-text">Outliers</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 d-flex">
+                            <div class="box">
+                                <p class="card-title">Predictive Maintenance</p>
+                                <div class="row cardrow d-flex">
+                                    <div class="col-6 d-flex">
+                                        
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card bg-success infocard">
+                                            <div class="card-body">
+                                                <h4><span>...</span></h4>
+                                                <p class="card-text">Suggested Preventive Actions</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 d-flex">
+                                        <div class="card bg-success infocard">
+                                            <div class="card-body">
+                                                <h4><span>...</span></h4>
+                                                <p class="card-text">Confidence Level</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/d3.v5.min.js') }}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{ url_for('static', filename='js/selecteq.js') }}"></script>
+  {% endblock %}
+</body>
+</html>
+    

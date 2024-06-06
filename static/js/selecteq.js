@@ -10,57 +10,73 @@ fetch('/static/stats.json')
     .catch(error => console.error('Error:', error));
 
 
-
-
-    function updateUniqueIdSelect() {
+    function updateUniqueIdSelect(callback) {
         var selectedEquipment = $('#equipment-select').val();
+        console.log('Selected Equipment:', selectedEquipment);
     
         $.getJSON('/static/items.json', function(data) {
             var uniqueIdSelect = $('#unique-id-select');
+            uniqueIdSelect.empty(); // Clear the current options
+            let firstUniqueId = null;
     
-            // Clear the current options
-            uniqueIdSelect.empty();
-    
-            // Add the new options
+            // Populate the unique ID select with active items that match the selected equipment
             $.each(data, function(index, item) {
-                // Check if the item is active and matches the selected equipment
                 if (item.IsActive && item.Name === selectedEquipment) {
                     uniqueIdSelect.append($('<option></option>').attr('value', item.UniqueID).text(item.UniqueID));
+                    if (!firstUniqueId) {
+                        firstUniqueId = item.UniqueID; // Store the first unique ID
+                    }
                 }
             });
     
-            // Trigger the change event for the unique ID select element
-            uniqueIdSelect.trigger('change');
+            if (firstUniqueId) {
+                uniqueIdSelect.val(firstUniqueId); // Set the value to the first unique ID
+                updateSelectedEquipmentData(firstUniqueId); // Update the data for the selected equipment
+            }
+    
+            // Execute the callback function if provided
+            if (typeof callback === 'function') {
+                callback(firstUniqueId);
+            }
         });
     }
-    
-    // Call the function when the equipment changes
-    $('#equipment-select').change(updateUniqueIdSelect);
-    
-    // Call the function when the page loads
-    $(document).ready(updateUniqueIdSelect);
-    
+
+// Call the function when the equipment changes
+$('#equipment-select').change(function() {
+    updateUniqueIdSelect(function(firstUniqueId) {
+        // Now that we have the first unique ID, trigger the change event
+        $('#unique-id-select').val(firstUniqueId).trigger('change');
+    });
+});
+
+// Initialize the unique ID select when the page loads
+$(document).ready(function() {
+    updateEquipmentSelect(); // Load equipment select options on page load
+    $('#equipment-select').change(function() {
+        updateUniqueIdSelect(function(firstUniqueId) {
+            // Trigger the change event after the unique ID select is updated
+            $('#unique-id-select').val(firstUniqueId).trigger('change');
+        });
+    });
+});
+
 function updateEquipmentSelect() {
     $.getJSON('/static/items.json', function(data) {
         var equipmentSelect = $('#equipment-select');
-
-        // Clear the current options
         equipmentSelect.empty();
 
         // Get unique, active equipment names
         var activeEquipments = [...new Set(data.filter(item => item.IsActive).map(item => item.Name))];
 
-        // Add the new options
+        // Add new options
         $.each(activeEquipments, function(index, equipmentName) {
             equipmentSelect.append($('<option></option>').attr('value', equipmentName).text(equipmentName));
         });
 
-        // Trigger the change event for the equipment select element
+        // Trigger the change event to load unique IDs and details
         equipmentSelect.trigger('change');
     });
 }
-$(document).ready(updateEquipmentSelect);
-
     
 
 

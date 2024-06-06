@@ -1,0 +1,37 @@
+<html>
+<head>
+    {% extends 'base.html' %}
+    {% block title %}Predictive Maintenance Dashboard - Index{% endblock %}
+</head>
+<body>
+    {% block content %}
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="equipment.html">Equipment</a>
+                <a href="inventory.html">Inventory</a>
+                <a href="#">Update Stats</a>
+                <a href="%">Train Datasets</a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container">
+        <button id="processButton">Process Data</button>
+        <div id="statusMessage"></div>
+    </div>
+
+    
+    <script src="{{ url_for('static', filename='js/legitcalendar.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/update.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/roomgraph.js') }}"></script>
+  {% endblock %}
+
+</body>
+</html>
