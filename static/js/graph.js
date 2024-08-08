@@ -797,11 +797,9 @@ function updateSelectedEquipmentData(selectedUniqueId) {
         document.getElementById('last-calib').textContent = selectedData['Days Since Last Calibration'];
         document.getElementById('mainte-type').textContent = selectedData['MAINTENANCE TYPE'];
         document.getElementById('mainte-freq').textContent = selectedData['FREQUENCY'];
-        document.getElementById('overall-int').textContent = selectedData['Overall Interpretation']
         document.getElementById('predicted-rul-mlr1').textContent = `${(selectedData['PredictedRUL_MLR'] * 365.25).toFixed(0)} days`;
         document.getElementById('predicted-rul-knn').textContent = `${(selectedData['PredictedRUL_KNN'] * 365.25).toFixed(0)} days`;
         document.getElementById('predicted-rul-svr').textContent = `${(selectedData['PredictedRUL_SVR'] * 365.25).toFixed(0)} days`;
-
         createHealthBar('health-percentage-mlr1', parseFloat(selectedData['EquipmentHealth_MLR']));
         createHealthBar('equipment-health-knn', parseFloat(selectedData['EquipmentHealth_KNN']));
         createHealthBar('equipment-health-svr', parseFloat(selectedData['EquipmentHealth_SVR']));

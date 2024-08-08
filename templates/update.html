@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     {% extends 'base.html' %}
@@ -11,26 +12,165 @@
             <!-- Sidebar -->
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="equipment.html">Equipment</a>
-                <a href="inventory.html">Inventory</a>
-                <a href="#">Update Stats</a>
-                <a href="%">Train Datasets</a>
+                <a href="{{ url_for('equipment') }}">Equipment</a>
+                <a href="{{ url_for('index') }}">Inventory</a>
+                <a href="#" id="updateButton">Update Stats</a>
+                <a href="#" id="trainButton">Train</a>
             </div>
-
+            <!-- Main Content -->
+            <div class="col-12">
+                <div class="header">
+                    <!-- Title on the left side -->
+                    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>
+                    <!-- Placeholder icons on the right side -->
+                    <div class="header-icons">
+                        
+                    </div>
+                </div>
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="#">Inventory Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-filter="inventory">Inventory</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-filter="borrower">Borrower's Slip</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-filter="calibration">Calibration</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                
+            </div>
+           
+            <div class="col-12">
+                <div class="infobox">
+                    <div class="box">
+                        <input type="file" id="fileInput" class="form-control-file" multiple>
+                        <button class="btn btn-primary mt-3" id="uploadBtn">Upload</button>
+                        <button class="btn btn-primary mt-3" id="addBtn">Add Data</button>
+                        
+                        <div class="row" data-filter="inventory" style="display: none;">
+                            <h2>Inventory Data</h2>
+                            <table class="table table-striped mt-3" id="inventory-table">
+                                <thead>
+                                    <tr>
+                                        <th>UniqueID</th>
+                                        <th>Equipment Name</th>
+                                        <th>Room</th>
+                                        <th>Item No.</th>
+                                        <th>Serial No.</th>
+                                        <th>Brand</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                
+                        <div class="row" data-filter="borrower">
+                            <h2>Borrower's Slip Data</h2>
+                            <table class="table table-striped mt-3" id="borrower-table">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>UniqueID</th>
+                                        <th>Equipment Name</th>
+                                        <th>DateTime Borrowed</th>
+                                        <th>DateTime Returned</th>
+                                        <th>Total Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                
+                        <div class="row" data-filter="calibration" style="display: none;">
+                            <h2>Calibration Data</h2>
+                            <table class="table table-striped mt-3" id="calibration-table">
+                                <thead>
+                                    <tr>
+                                        <th>Calibration ID</th>
+                                        <th>UniqueID</th>
+                                        <th>Type of Service</th>
+                                        <th>Description</th>
+                                        <th>Manufacturer</th>
+                                        <th>Model Number</th>
+                                        <th>Serial Number</th>
+                                        <th>Procedure Number</th>
+                                        <th>As Left</th>
+                                        <th>Order Number</th>
+                                        <th>Calibration Location</th>
+                                        <th>Date Received</th>
+                                        <th>Calibration Date</th>
+                                        <th>Calibration Due</th>
+                                        <th>Relative Humidity</th>
+                                        <th>Ambient Temperature</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <button id="processButton">Process Data</button>
-        <div id="statusMessage"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addDataModal" tabindex="-1" role="dialog" aria-labelledby="addDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="addDataModalLabel">Add Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body" id="form-content">
+            <!-- Form content will be inserted here -->
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveDataBtn">Save</button>
+            </div>
+        </div>
+        </div>
     </div>
 
-    
-    <script src="{{ url_for('static', filename='js/legitcalendar.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/update.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/roomgraph.js') }}"></script>
+    <!-- Update Data Modal -->
+    <div class="modal fade" id="updateDataModal" tabindex="-1" aria-labelledby="updateDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="updateDataModalLabel">Update Data</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <form id="updateDataForm">
+                <!-- Form fields for updating data will be inserted here dynamically -->
+            </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveUpdatedDataBtn">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  
+  
+
   {% endblock %}
 
 </body>
