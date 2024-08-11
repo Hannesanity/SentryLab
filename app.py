@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_file
 import pandas as pd
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -523,11 +523,6 @@ def update_data(data_type):
         return jsonify({'success': 'Data updated successfully'})
     
     except Exception as e:
-        logging.error(f"Error updating data in {table}: {str(e)}")
-        logging.error(f"Error type: {type(e).__name__}")
-        logging.error(f"Error details: {e.args}")
-        logging.error(f"Query: {query}")
-        logging.error(f"Values: {values}")
         return jsonify({'error': str(e)}), 500
 
 
@@ -548,7 +543,6 @@ def delete_data(data_type):
 
         table = data_mappings[data_type]
         data = request.json
-        print(f"Data received: {data}")
 
         # Determine which table to delete from based on the table_name
         if table == 'inventory':
@@ -583,6 +577,46 @@ def delete_data(data_type):
         print(f"Error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/export/<data_type>', methods=['POST'])
+def export_data(data_type):
+    data_mappings = {
+        'inventory': 'inventory',
+        'borrower': 'borrowerslip',
+        'calibration': 'calibration'
+    }
+
+    if data_type not in data_mappings:
+        print("Invalid data type received.")
+        return jsonify({'error': 'Invalid data type'}), 400
+
+    table = data_mappings[data_type]
+
+    export_filename = {
+        'inventory': 'Inventory.csv',
+        'borrowerslip': 'BorrowerSlip.csv',
+        'calibration': 'Calibration.csv'
+    }
+    filename = export_filename.get(table)
+
+    try:
+        conn = db_util.get_db_conn()
+        
+        # Construct and execute the update query
+        query = f"SELECT * FROM {table}"
+        export_df = pd.read_sql_query(query, conn)
+        export_path = f'datasets/{filename}'
+
+        export_df.to_csv(export_path)
+
+        conn.close()
+
+        return send_file(export_path, as_attachment=True, download_name=filename)
+
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
     
 @app.route('/get_inventory_for_borrower', methods=['GET'])
 def get_inventory_for_borrower():
@@ -598,6 +632,7 @@ def get_inventory_for_borrower():
         conn.close()
         
         return jsonify({'success': True, 'inventory': inventory_items})
+    
     except Exception as e:
         logging.error(f"Error fetching inventory for borrower: {str(e)}")
         return jsonify({'error': str(e)}), 500

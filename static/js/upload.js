@@ -188,6 +188,22 @@ $(document).ready(function() {
         }
     });
 
+    $('#exportBtn').click(function() {
+        var activeFilter = $('.navbar-nav .nav-link.active').attr('data-filter');
+        $.ajax({
+            url: '/export/' + activeFilter,
+            type: 'POST',
+            success: function(response) {
+                alert(response.success || response.error);
+                fetchData(activeFilter);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error during export:', errorThrown);
+                alert('Error during export: ' + textStatus);
+            }
+        });
+    });
+
     // Initial fetch to populate the table
     function fetchData(filter) {
         if (filter === 'inventory') {
