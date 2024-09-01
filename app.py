@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import logging
 from flask_caching import Cache
 import re
+import os
+import json
 # Importing other scripts
 import db_util
 import mltrain
@@ -24,9 +26,9 @@ cache.init_app(app)
 logging.basicConfig(level=logging.DEBUG)
 
 
-inventory_df = pd.read_csv("datasets/Inventory.csv")
-borrower_df = pd.read_csv("datasets/BorrowerSlip.csv")
-calibration_df = pd.read_csv("datasets/Calibration.csv")
+inventory_df = pd.read_csv("datasets/InventoryExport.csv")
+borrower_df = pd.read_csv("datasets/BorrowerSlipExport.csv")
+calibration_df = pd.read_csv("datasets/CalibrationExport.csv")
 ml_df = pd.read_csv("datasets/Predictions.csv")
 
 # Initialize the lemmatizer
@@ -34,11 +36,11 @@ lemmatizer = WordNetLemmatizer()
 
 
 # Preparation of Datetime
-if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTime Borrowed']):
-    borrower_df['DateTime Borrowed'] = pd.to_datetime(borrower_df['DateTime Borrowed'], errors='coerce')
+if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTimeBorrowed']):
+    borrower_df['DateTimeBorrowed'] = pd.to_datetime(borrower_df['DateTimeBorrowed'], errors='coerce')
 
-if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTime Returned']):
-    borrower_df['DateTime Returned'] = pd.to_datetime(borrower_df['DateTime Returned'], errors='coerce')
+if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTimeReturned']):
+    borrower_df['DateTimeReturned'] = pd.to_datetime(borrower_df['DateTimeReturned'], errors='coerce')
 
 # Train models
 
@@ -47,6 +49,9 @@ if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTime Returned']):
 def index():
     return render_template('inventory.html')
 
+@app.route('/inventory')
+def inventory():
+    return render_template('inventory.html')
 
 @app.route('/unique_ids')
 def unique_ids():
@@ -76,8 +81,11 @@ def update():
 @app.route('/process_data', methods=['POST'])
 def process_data():
     # The calculate_room function (with required modifications if any)
+
+    cache.clear()
     stats.calculate_room()
     stats.calculate_equipment()
+    print("Tagumpay!")
     return jsonify({"status": "processing complete"})
 
 @app.route('/train_data', methods=['POST'])
@@ -93,8 +101,8 @@ def upload_file(data_type):
         'inventory': {
             'table': 'inventory',
             'expected_columns': [
-                'UniqueID', 'Name', 'Room', 'Item No.', 'Serial No.', 'Brand', 
-                'Maintenance Type', 'Maintenance Frequency', 'Status', 'IsActive', 
+                'UniqueID', 'Name', 'Room', 'ItemNo.', 'SerialNo.', 'Brand', 
+                'Maintenance Type', 'MaintenanceFrequency', 'Status', 'IsActive', 
                 'Estimated Useful Life', 'Factors Affecting Health'
             ],
             'update_columns': [
@@ -106,9 +114,9 @@ def upload_file(data_type):
         'borrower': {
             'table': 'borrowerslip',
             'expected_columns': [
-                'Date Borrowed', 'Date Returned', 'Equipment Name', 'Time Borrowed', 
-                'Time Returned', 'Days Duration', 'Time Duration', 'Total Duration', 
-                'DateTime Borrowed', 'DateTime Returned', 'UniqueID', 'isReturned'
+                'DateBorrowed', 'DateReturned', 'EquipmentName', 'TimeBorrowed', 
+                'TimeReturned', 'Days Duration', 'TimeDuration', 'TotalDuration', 
+                'DateTimeBorrowed', 'DateTimeReturned', 'UniqueID', 'isReturned'
             ],
             'update_columns': [
                 'DateBorrowed', 'DateReturned', 'EquipmentName', 'TimeBorrowed', 
@@ -119,10 +127,10 @@ def upload_file(data_type):
         'calibration': {
             'table': 'calibration',
             'expected_columns': [
-                'UniqueID', 'Type of Service', 'Description', 
-                'Manufacturer', 'Model Number', 'Serial Number', 'Procedure Number', 
-                'As Left', 'Order Number', 'Calibration Location', 'Date Received', 
-                'Calibration Date', 'Calibration Due', 'Relative Humidity', 
+                'UniqueID', 'TypeofService', 'Description', 
+                'Manufacturer', 'ModelNumber', 'SerialNumber', 'ProcedureNumber', 
+                'AsLeft', 'OrderNumber', 'CalibrationLocation', 'DateReceived', 
+                'CalibrationDate', 'CalibrationDue', 'RelativeHumidity', 
                 'Ambient Temperature'
             ],
             'update_columns': [
@@ -161,8 +169,8 @@ def upload_file(data_type):
             # Handle date and time conversion only for 'borrower' data type
             if data_type == 'borrower':
                 # Convert date and time columns
-                date_columns = ['Date Borrowed', 'Date Returned']
-                time_columns = ['Time Borrowed', 'Time Returned']
+                date_columns = ['DateBorrowed', 'DateReturned']
+                time_columns = ['TimeBorrowed', 'TimeReturned']
 
                 for col in date_columns:
                     df[col] = pd.to_datetime(df[col], format='%d/%m/%Y', errors='coerce').dt.strftime('%Y-%m-%d')
@@ -171,16 +179,14 @@ def upload_file(data_type):
                     df[col] = pd.to_datetime(df[col], format='%I:%M %p').dt.strftime('%H:%M:%S')
 
                 # Combine date and time columns to create datetime columns in the correct format
-                df['DateTime Borrowed'] = pd.to_datetime(df['Date Borrowed'] + ' ' + df['Time Borrowed']).dt.strftime('%Y-%m-%d %H:%M:%S')
-                df['DateTime Returned'] = pd.to_datetime(df['Date Returned'] + ' ' + df['Time Returned']).dt.strftime('%Y-%m-%d %H:%M:%S')
+                df['DateTimeBorrowed'] = pd.to_datetime(df['DateBorrowed'] + ' ' + df['TimeBorrowed']).dt.strftime('%Y-%m-%d %H:%M:%S')
+                df['DateTimeReturned'] = pd.to_datetime(df['DateReturned'] + ' ' + df['TimeReturned']).dt.strftime('%Y-%m-%d %H:%M:%S')
 
                 # Convert float hours to timedelta
-                df['Time Duration'] = pd.to_timedelta(df['Time Duration'], unit='h')
-                df['Total Duration'] = pd.to_timedelta(df['Total Duration'], unit='h')
+                df['TimeDuration'] = pd.to_timedelta(df['TimeDuration'], unit='h')
 
                 # Convert timedelta to string in HH:MM:SS format
-                df['Time Duration'] = df['Time Duration'].apply(lambda x: f"{int(x.total_seconds() // 3600):02d}:{int((x.total_seconds() % 3600) // 60):02d}")
-                df['Total Duration'] = df['Total Duration'].apply(lambda x: f"{int(x.total_seconds() // 3600):02d}:{int((x.total_seconds() % 3600) // 60):02d}")
+                df['TimeDuration'] = df['TimeDuration'].apply(lambda x: f"{int(x.total_seconds() // 3600):02d}:{int((x.total_seconds() % 3600) // 60):02d}")
 
             elif data_type == 'inventory':
                 # Check for duplicate UniqueID values
@@ -208,27 +214,17 @@ def upload_file(data_type):
                 insert_values = tuple(row[expected_columns])
                 unique_id = row['UniqueID']
 
-                if data_type == 'calibration':
-                    cursor.execute(
-                        f"""
-                        INSERT INTO {table} ({', '.join(update_columns)}) 
-                        VALUES ({','.join(['?'] * len(update_columns))})
-                        """,
-                        insert_values
-                    )
-                    logging.debug(f"Inserted row into {table}")
-
-                else:
-                    cursor.execute(
-                        f"""
-                        INSERT INTO {table} ({', '.join(update_columns)}) 
-                        VALUES ({','.join(['?'] * len(update_columns))})
-                        ON CONFLICT(UniqueID) DO UPDATE SET 
-                        {', '.join([f"{col}=excluded.{col}" for col in update_columns])}
-                        """,
-                        insert_values
-                    )
-                    logging.debug(f"Inserted row with UniqueID {unique_id} into {table}")
+        
+                
+                cursor.execute(
+                    f"""
+                    INSERT INTO {table} ({', '.join(update_columns)}) 
+                    VALUES ({','.join(['?'] * len(update_columns))})
+                    
+                    """,
+                    insert_values
+                )
+                logging.debug(f"Inserted row with UniqueID {unique_id} into {table}")
 
             conn.commit()
             conn.close()
@@ -592,9 +588,9 @@ def export_data(data_type):
     table = data_mappings[data_type]
 
     export_filename = {
-        'inventory': 'Inventory.csv',
-        'borrowerslip': 'BorrowerSlip.csv',
-        'calibration': 'Calibration.csv'
+        'inventory': 'InventoryExport.csv',
+        'borrowerslip': 'BorrowerSlipExport.csv',
+        'calibration': 'CalibrationExport.csv'
     }
     filename = export_filename.get(table)
 
@@ -613,6 +609,39 @@ def export_data(data_type):
         return send_file(export_path, as_attachment=True, download_name=filename)
 
     
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/add-room', methods=['POST'])
+def add_room():
+    try:
+        # Load the incoming data
+        data = request.json
+        room_number = data.get('roomNumber')
+        room_name = data.get('roomName')
+        
+        if not room_number or not room_name:
+            return jsonify({'error': 'Room number and name are required'}), 400
+
+        # Read the existing rooms from the JSON file
+        if os.path.exists('static/rooms.json'):
+            with open('static/rooms.json', 'r') as file:
+                rooms = json.load(file)
+        else:
+            rooms = []
+
+        # Add the new room
+        rooms.append({
+            'RoomName': room_name,
+            'RoomNumber': room_number
+        })
+
+        # Save the updated list back to the JSON file
+        with open('static/rooms.json', 'w') as file:
+            json.dump(rooms, file, indent=2)
+
+        return jsonify({'message': 'Room added successfully'}), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -666,5 +695,7 @@ def generate_unique_id(data):
     return unique_id
 
 
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

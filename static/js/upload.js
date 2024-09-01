@@ -136,6 +136,22 @@ $(document).ready(function() {
         $('.row[data-filter="' + filter + '"]').show();
     }
 
+    function populateRoomDropdown() {
+        $.getJSON('/static/rooms.json', function (data) {
+            const roomSelect = $('#roomtxt');
+            roomSelect.empty(); // Clear existing options
+            roomSelect.append('<option value="" disabled selected>Select a room</option>'); // Default option
+
+            // Loop through JSON data and add each room as an option
+            data.forEach(room => {
+                const option = `<option value="${room.RoomNumber}">${room.RoomNumber}</option>`;
+                roomSelect.append(option);
+            });
+        }).fail(function (jqxhr, textStatus, error) {
+            console.error('Error fetching room data:', textStatus, error);
+        });
+    }
+
     $(document).on('change', '#returnedCheck', function() {
         console.log("Checkbox state changed:", this.checked);
         if ($(this).is(':checked')) {
@@ -221,6 +237,10 @@ $(document).ready(function() {
     showFilteredTable(defaultFilter);
     fetchData(defaultFilter);
 
+    $('#addDataModal').on('show.bs.modal', function () {
+        populateRoomDropdown();
+    });
+
      // Click event for Add Data button
      $('#addBtn').click(function() {
         var selectedTable = $('.row[data-filter]:visible').attr('data-filter');
@@ -238,13 +258,6 @@ $(document).ready(function() {
                     <label for="roomtxt" class="form-label">Room</label>
                     <select class="form-select" id="roomtxt" name="Room" required>
                         <option value="" disabled selected>Select a room</option>
-                        <option value="ENB201">ENB201</option>
-                        <option value="ENB204">ENB204</option>
-                        <option value="ENB205">ENB205</option>
-                        <option value="TC101">TC101</option>
-                        <option value="TC102">TC102</option>
-                        <option value="ER201">ER201</option>
-                        <option value="Others">Others</option>
                     </select>
                 </div>
 
@@ -396,6 +409,72 @@ $(document).ready(function() {
         });
     });
 
+    $('#addRoomBtn').click(function () {
+        $('#addRoomModal').modal('show');
+    });
+    
+    $('#saveRoomBtn').click(function () {
+        const roomNumber = $('#roomNumber').val().trim();
+        const roomName = $('#roomName').val().trim();
+    
+        if (roomNumber && roomName) {
+            // Check if the room number or room name already exists
+            if (isRoomDuplicate(roomNumber, roomName)) {
+                alert('The room number or room name already exists.');
+                return; // Stop further execution
+            }
+    
+            // Proceed with the AJAX request if no duplicates are found
+            $.ajax({
+                url: '/add-room',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    roomNumber: roomNumber,
+                    roomName: roomName
+                }),
+                success: function (response) {
+                    console.log('Room added successfully:', response);
+                    // Add the new room to the select dropdown
+                    addRoomOption(roomNumber, roomName);
+                    // Reset the form and close the modal
+                    $('#addRoomForm')[0].reset();
+                    $('#addRoomModal').modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error adding room:', status, error);
+                }
+            });
+        } else {
+            alert('Please fill out both fields.');
+        }
+    });
+    
+    // Function to check if room number or room name already exists
+    function isRoomDuplicate(roomNumber, roomName) {
+        let isDuplicate = false;
+        $('#roomtxt option').each(function () {
+            const existingNumber = $(this).val().trim();
+            const existingName = $(this).text().trim();
+    
+            // Check if room number or room name already exists
+            if (existingNumber === roomNumber || existingName === roomName) {
+                isDuplicate = true;
+                return false; // Break out of the each loop
+            }
+        });
+        return isDuplicate;
+    }
+    
+    // Function to add a room option dynamically
+    function addRoomOption(roomNumber, roomName) {
+        const roomSelect = $('#roomtxt');
+        const newOption = `<option value="${roomNumber}">${roomName}</option>`;
+        roomSelect.append(newOption);
+        console.log(`Added Room: ${roomNumber} - ${roomName}`);
+    }
+    
+
     $('#saveDataBtn').on('click', function() {
         var selectedTable = $('.row[data-filter]:visible').attr('data-filter');
         var data = {};
@@ -509,6 +588,8 @@ $(document).ready(function() {
             }
         });
     });
+
+
 
     function clearForm(formType) {
         switch(formType) {

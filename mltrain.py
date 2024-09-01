@@ -10,24 +10,26 @@ import numpy as np
 
 
 
-inventory_df = pd.read_csv("datasets/Inventory.csv")
-borrower_df = pd.read_csv("datasets/BorrowerSlip.csv")
-calibration_df = pd.read_csv("datasets/Calibration.csv")
+inventory_df = pd.read_csv("datasets/InventoryExport.csv")
+borrower_df = pd.read_csv("datasets/BorrowerSlipExport.csv")
+calibration_df = pd.read_csv("datasets/CalibrationExport.csv")
 ml_df = pd.read_csv("datasets/Predictions.csv")
 
+
+
 # Convert date columns to datetime objects
-borrower_df['Date Borrowed'] = pd.to_datetime(borrower_df['Date Borrowed'], errors='coerce')
-borrower_df['Date Returned'] = pd.to_datetime(borrower_df['Date Returned'], errors='coerce')
+borrower_df['DateBorrowed'] = pd.to_datetime(borrower_df['DateBorrowed'], errors='coerce')
+borrower_df['DateReturned'] = pd.to_datetime(borrower_df['DateReturned'], errors='coerce')
 
 
-calibration_df['Calibration Date'] = pd.to_datetime(calibration_df['Calibration Date'], dayfirst=True, errors='coerce')
-calibration_df['Calibration Due'] = pd.to_datetime(calibration_df['Calibration Due'], dayfirst=True, errors='coerce')
+calibration_df['CalibrationDate'] = pd.to_datetime(calibration_df['CalibrationDate'], dayfirst=True, errors='coerce')
+calibration_df['CalibrationDue'] = pd.to_datetime(calibration_df['CalibrationDue'], dayfirst=True, errors='coerce')
 
-if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTime Borrowed']):
-    borrower_df['DateTime Borrowed'] = pd.to_datetime(borrower_df['DateTime Borrowed'], errors='coerce')
+if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTimeBorrowed']):
+    borrower_df['DateTimeBorrowed'] = pd.to_datetime(borrower_df['DateTimeBorrowed'], errors='coerce')
 
-if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTime Returned']):
-    borrower_df['DateTime Returned'] = pd.to_datetime(borrower_df['DateTime Returned'], errors='coerce')
+if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTimeReturned']):
+    borrower_df['DateTimeReturned'] = pd.to_datetime(borrower_df['DateTimeReturned'], errors='coerce')
 
 def convert_frequency_to_numerical(freq):
     if freq == 'Annual':
@@ -49,7 +51,7 @@ def predict_calibration_date(last_known_calibration, frequency):
 
 def calculate_depreciation_date(first_borrow_date, estimated_useful_life):
     try:
-        # Convert estimated useful life to an integer if possible
+        # Convert EstimatedUsefulLife to an integer if possible
         years = int(estimated_useful_life)
         return first_borrow_date + pd.DateOffset(years=years)
     except ValueError:
@@ -64,17 +66,17 @@ grouped = borrower_df.groupby('UniqueID')
 # Calculate usage frequency
 usage_frequency = grouped.size()
 
-# Calculate Total Duration of use
-total_duration = grouped['Total Duration'].sum()
+# Calculate TotalDuration of use
+total_duration = grouped['TotalDuration'].sum()
 
 # Calculate the first borrow date
-first_borrow_date = grouped['Date Borrowed'].min()
+first_borrow_date = grouped['DateBorrowed'].min()
 
 # Calculate average duration per use
-average_duration = grouped['Total Duration'].mean()
+average_duration = grouped['TotalDuration'].mean()
 
 # Calculate time since last use
-most_recent_use = grouped['Date Returned'].max()
+most_recent_use = grouped['DateReturned'].max()
 current_date = pd.to_datetime('today')
 time_since_last_use = current_date - most_recent_use
 
@@ -91,16 +93,16 @@ training_df = pd.DataFrame({
 # Calculate current age in years
 training_df['CurrentAge'] = (current_date - training_df['FirstBorrowDate']).dt.days / 365.25
 
-inventory_df['NumericalFrequency'] = inventory_df['Maintenance Frequency'].apply(convert_frequency_to_numerical)
+inventory_df['NumericalFrequency'] = inventory_df['Frequency'].apply(convert_frequency_to_numerical)
 # Merge the numerical frequency into the maintenance DataFrame
 training_df = training_df.merge(inventory_df[['UniqueID', 'NumericalFrequency']], on='UniqueID', how='left')
 
 
 # Merge the inventory DataFrame to include 'EstimatedUsefulLife'
-training_df = training_df.merge(inventory_df[['UniqueID', 'Estimated Useful Life']], on='UniqueID', how='left')
+training_df = training_df.merge(inventory_df[['UniqueID', 'EstimatedUsefulLife']], on='UniqueID', how='left')
 
 # Calculate Remaining Useful Life
-training_df['RemainingUsefulLife'] = training_df['Estimated Useful Life'] - training_df['CurrentAge']
+training_df['RemainingUsefulLife'] = training_df['EstimatedUsefulLife'] - training_df['CurrentAge']
 
 # Ensure the RUL is not negative
 training_df['RemainingUsefulLife'] = training_df['RemainingUsefulLife'].clip(lower=0)
@@ -108,12 +110,12 @@ training_df['RemainingUsefulLife'] = training_df['RemainingUsefulLife'].clip(low
 training_df['TimeSinceLastUse'] = training_df['TimeSinceLastUse'].dt.total_seconds() / (24 * 3600)
 
 
-# Merge the calibration DataFrame to include 'Calibration Due'
-training_df = training_df.merge(calibration_df[['UniqueID', 'Calibration Due']], on='UniqueID', how='left')
+# Merge the calibration DataFrame to include 'CalibrationDue'
+training_df = training_df.merge(calibration_df[['UniqueID', 'CalibrationDue']], on='UniqueID', how='left')
 
-# Predict Next Calibration Date based on 'Calibration Due'
+# Predict Next CalibrationDate based on 'CalibrationDue'
 training_df['NextCalibrationDate'] = training_df.apply(
-    lambda row: predict_calibration_date(row['Calibration Due'], row['NumericalFrequency']),
+    lambda row: predict_calibration_date(row['CalibrationDue'], row['NumericalFrequency']),
     axis=1
 )
 
@@ -130,7 +132,7 @@ training_df['NextMaintenanceDate'] = training_df.apply(
 
 # Determine Depreciation Date
 training_df['DepreciationDate'] = training_df.apply(
-    lambda row: calculate_depreciation_date(row['FirstBorrowDate'], row['Estimated Useful Life']),
+    lambda row: calculate_depreciation_date(row['FirstBorrowDate'], row['EstimatedUsefulLife']),
     axis=1
 )
 
@@ -139,7 +141,7 @@ training_df.drop_duplicates(subset='UniqueID', inplace=True)
 
 def MLR_Train():
     # Exclude 'FirstBorrowDate' and 'UniqueID' from the regression model input
-    regression_columns = ['UsageFrequency', 'TotalDuration', 'AverageDuration', 'TimeSinceLastUse', 'CurrentAge', 'Estimated Useful Life']
+    regression_columns = ['UsageFrequency', 'TotalDuration', 'AverageDuration', 'TimeSinceLastUse', 'CurrentAge', 'EstimatedUsefulLife']
 
     # Define your features (X) and target variable (y)
     X = training_df[regression_columns]
@@ -193,7 +195,7 @@ def MLR_Train():
 
     # Add the predictions to the cleaned DataFrame
     mlr_df['PredictedRUL'] = predictions_cleaned
-    mlr_df['HealthPercentage'] = (mlr_df['PredictedRUL'] / mlr_df['Estimated Useful Life']) * 100
+    mlr_df['HealthPercentage'] = (mlr_df['PredictedRUL'] / mlr_df['EstimatedUsefulLife']) * 100
 
     # Ensure the health percentage is not greater than 100%
     mlr_df['HealthPercentage'] = mlr_df['HealthPercentage'].clip(upper=100)
@@ -233,7 +235,7 @@ def SVR_Train():
     regression_columns = [
         'UsageFrequency', 'TotalDuration', 'AverageDuration',
         'TimeSinceLastUse', 'CurrentAge', 'NumericalFrequency',
-        'Estimated Useful Life'
+        'EstimatedUsefulLife'
     ]
     # Define your features (X) and target variable (y)
     X = training_df[regression_columns]
@@ -259,9 +261,9 @@ def SVR_Train():
 
     # Add the predictions to the cleaned DataFrame
     svr_df.loc[:, 'PredictedRUL'] = svr_predictions
-    svr_df.loc[:, 'EquipmentHealth'] = (svr_df['PredictedRUL'] / svr_df['Estimated Useful Life']) * 100
+    svr_df.loc[:, 'EquipmentHealth'] = (svr_df['PredictedRUL'] / svr_df['EstimatedUsefulLife']) * 100
 
-    # Ensure the Equipment Health percentage is between 0 and 100
+    # Ensure the EquipmentHealth percentage is between 0 and 100
     svr_df['EquipmentHealth'] = svr_df['EquipmentHealth'].clip(lower=0, upper=100)
     # Calculate MAE and RMSE for the SVR model
     svr_mae = mean_absolute_error(y_cleaned, svr_predictions)
@@ -289,7 +291,7 @@ def KNN_Train():
     regression_columns = [
         'UsageFrequency', 'TotalDuration', 'AverageDuration',
         'TimeSinceLastUse', 'CurrentAge', 'NumericalFrequency',
-        'Estimated Useful Life'
+        'EstimatedUsefulLife'
     ]
 
 
@@ -333,13 +335,13 @@ def KNN_Train():
     # Assign the full set of predictions to the DataFrame
     training_df['PredictedRUL'] = full_predictions
 
-    # Calculate Equipment Health as a percentage of the Estimated Useful Life
-    training_df['Equipment Health'] = (training_df['PredictedRUL'] / training_df['Estimated Useful Life']) * 100
+    # Calculate EquipmentHealth as a percentage of the EstimatedUsefulLife
+    training_df['EquipmentHealth'] = (training_df['PredictedRUL'] / training_df['EstimatedUsefulLife']) * 100
 
-    # Ensure the Equipment Health percentage is between 0 and 100
-    training_df['Equipment Health'] = training_df['Equipment Health'].clip(lower=0, upper=100)
+    # Ensure the EquipmentHealth percentage is between 0 and 100
+    training_df['EquipmentHealth'] = training_df['EquipmentHealth'].clip(lower=0, upper=100)
 
-    # Save the DataFrame with the predictions and Equipment Health to a CSV file
+    # Save the DataFrame with the predictions and EquipmentHealth to a CSV file
     training_df.to_csv('datasets/KNN Complete.csv', index=False)
 
     pass
@@ -361,12 +363,12 @@ def combine_models():
         }
     )
 
-    df2_selected = df2[['UniqueID', 'NextMaintenanceDate', 'DepreciationDate', 'PredictedRUL', 'Equipment Health']].rename(
+    df2_selected = df2[['UniqueID', 'NextMaintenanceDate', 'DepreciationDate', 'PredictedRUL', 'EquipmentHealth']].rename(
         columns={
             'NextMaintenanceDate': 'NextMaintenanceDate_KNN',
             'DepreciationDate': 'DepreciationDate_KNN',
             'PredictedRUL': 'PredictedRUL_KNN',
-            'Equipment Health': 'EquipmentHealth_KNN'
+            'EquipmentHealth': 'EquipmentHealth_KNN'
         }
     )
 

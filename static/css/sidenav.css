@@ -1,46 +1,54 @@
-
+/* Sidebar */
 .sidenav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #416294;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-  }
-  
-  .sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #fff;
-    display: block;
-    transition: 0.3s;
-  }
-  
-  .sidenav a:hover {
-    color: #303861;
-  }
-  
-/* Style for the active state */
-  .sidenav .nav-link.active {
-    background-color: #1e74b4; /* Background color for active state */
-    color: #fff; /* Text color for active state */
-    border-left: 4px solid #b2c8e1; /* Left border for active state */
-  }
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #416294;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
 
-  .sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-  }
-  
-  @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-  }
+.sidenav a {
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.sidenav a i {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+/* Hover Effect */
+.sidenav a:hover {
+  background-color: #1e74b4;
+  color: #fff;
+}
+
+/* Active State */
+.sidenav .nav-link.active {
+  background-color: #1e74b4;
+  border-left: 4px solid #b2c8e1;
+}
+
+/* Close Button */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav { padding-top: 15px; }
+  .sidenav a { font-size: 18px; }
+}

@@ -6,6 +6,7 @@ let allGraphData = {
     weekly: null,
     hourly: null
 };
+var calendarsched;
 
 Chart.defaults.global.defaultFontColor = '#FFFFFF';
 Chart.defaults.global.defaultFontSize = 12;
@@ -772,7 +773,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
         return item['UniqueID'] === selectedUniqueId;
     });
 
-
+    console.log(selectedData)
 
     if (selectedData) {
         document.getElementById('total-qty').textContent = selectedData['Frequency'];
@@ -781,7 +782,6 @@ function updateSelectedEquipmentData(selectedUniqueId) {
         document.getElementById('total-dur').textContent = formatAsTime(selectedData['Total Duration']);
         document.getElementById('max-dur').textContent = formatAsTime(selectedData['Max Duration']);
         document.getElementById('min-dur').textContent = formatAsTime(selectedData['Min Duration']);
-        document.getElementById('correlation').textContent = parseFloat(selectedData['Correlations']).toFixed(2);
         document.getElementById('outliers').textContent = parseFloat(selectedData['Outliers']).toFixed(2);
         document.getElementById('firstdateret').textContent = new Date(selectedData['First Return Date']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         document.getElementById('firstdatebor').textContent = new Date(selectedData['First Borrow Date']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -803,87 +803,68 @@ function updateSelectedEquipmentData(selectedUniqueId) {
         createHealthBar('health-percentage-mlr1', parseFloat(selectedData['EquipmentHealth_MLR']));
         createHealthBar('equipment-health-knn', parseFloat(selectedData['EquipmentHealth_KNN']));
         createHealthBar('equipment-health-svr', parseFloat(selectedData['EquipmentHealth_SVR']));
-        document.getElementById('next-maintenance-date-mlr').textContent = new Date(selectedData['NextMaintenanceDate_MLR']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        document.getElementById('next-maintenance-date-knn').textContent = new Date(selectedData['NextMaintenanceDate_KNN']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        document.getElementById('next-maintenance-date-svr').textContent = new Date(selectedData['NextMaintenanceDate_SVR']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-        // Set the text content for Depreciation Date
-        document.getElementById('depreciation-date-mlr').textContent = new Date(selectedData['DepreciationDate_MLR']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        document.getElementById('depreciation-date-knn').textContent = new Date(selectedData['DepreciationDate_KNN']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        document.getElementById('depreciation-date-svr').textContent = new Date(selectedData['DepreciationDate_SVR']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-        // Yearly Interpretation
-        const sortedYearlyData = filteredYearData.sort((a, b) => a.YEAR - b.YEAR);
-        const yearlyUl = document.createElement('ul');
-        yearlyUl.style.listStyleType = "none";  // This removes the bullet points
-        yearlyUl.className = "list-group"; // Apply Bootstrap list group class
-
-        sortedYearlyData.forEach(item => {
-            const li = document.createElement('li');
-            li.className = "list-group-item"; // Apply Bootstrap list group item class
-            li.textContent = item['Yearly Interpretation'];
-            yearlyUl.appendChild(li);
-        });
         
-        const yearlyContainer = document.getElementById('yearly-int');
-        yearlyContainer.innerHTML = ''; // Clear any existing content
-        yearlyContainer.appendChild(yearlyUl);
+        var nextMaintenanceDate = selectedData['NextMaintenanceDate_MLR'];
 
-        // Handling Monthly Data
-        const sortedMonthlyData = filteredMonthlyData.sort((a, b) => a.MONTH - b.MONTH);
-        const monthlyUl = document.createElement('ul');
-        monthlyUl.style.listStyleType = "none"; // This removes the bullet points
-        monthlyUl.className = "list-group"; // Apply Bootstrap list group class
+        if (nextMaintenanceDate) {
+            redirectToSchedule(nextMaintenanceDate, 'dayGridMonth');
+        }
 
-        sortedMonthlyData.forEach(item => {
-            const li = document.createElement('li');
-            li.className = "list-group-item"; // Apply Bootstrap list group item class
-            li.textContent = item['Monthly Interpretation'];
-            monthlyUl.appendChild(li);
-        });
-        
-        const monthlyContainer = document.getElementById('monthly-int');
-        monthlyContainer.innerHTML = ''; // Clear any existing content
-        monthlyContainer.appendChild(monthlyUl);
-        
-        const sortedDailyData = filteredWeeklyData.sort((a, b) => a['DAY OF WEEK'] - b['DAY OF WEEK']);
-        const dailyUl = document.createElement('ul');
-        dailyUl.style.listStyleType = "none"; // This removes the bullet points
-        dailyUl.className = "list-group"; // Apply Bootstrap list group class
+        var events = [
+            {
+                title: selectedData['Equipment Name'] + ' ' + selectedData['MAINTENANCE TYPE'] + ' based on MLR',
+                start: selectedData['NextMaintenanceDate_MLR'],
+                allDay: true,
+                classNames: ['maintenance-event'] // Add a class for maintenance events
+            },
+            {
+                title: selectedData['Equipment Name'] + ' ' + selectedData['MAINTENANCE TYPE'] + ' based on KNN',
+                start: selectedData['NextMaintenanceDate_KNN'],
+                allDay: true,
+                classNames: ['maintenance-event']
+            },
+            {
+                title: selectedData['Equipment Name'] + ' ' + selectedData['MAINTENANCE TYPE'] + ' based on SVR',
+                start: selectedData['NextMaintenanceDate_SVR'],
+                allDay: true,
+                classNames: ['maintenance-event']
+            },
+            {
+                title: selectedData['Equipment Name'] + ' Depreciation based on MLR',
+                start: selectedData['DepreciationDate_MLR'],
+                allDay: true,
+                classNames: ['depreciation-event'] // Add a class for depreciation events
+            },
+            {
+                title: selectedData['Equipment Name'] + ' Depreciation based on KNN',
+                start: selectedData['DepreciationDate_KNN'],
+                allDay: true,
+                classNames: ['depreciation-event']
+            },
+            {
+                title: selectedData['Equipment Name'] + ' Depreciation based on SVR',
+                start: selectedData['DepreciationDate_SVR'],
+                allDay: true,
+                classNames: ['depreciation-event']
+            }
+        ];
 
-        sortedDailyData.forEach(item => {
-            const li = document.createElement('li');
-            li.className = "list-group-item"; // Apply Bootstrap list group item class
-            li.textContent = item['Daily Interpretation'];
-            dailyUl.appendChild(li);
-        });
-        
-        const dailyContainer = document.getElementById('daily-int');
-        dailyContainer.innerHTML = ''; // Clear any existing content
-        dailyContainer.appendChild(dailyUl);
+        // Log events for debugging
+        console.log('Events to be added:', events);
 
-        // Handling Hourly Data
-        const sortedHourlyData = filteredHourlyData.sort((a, b) => a.HOUR - b.HOUR);
-        const hourlyUl = document.createElement('ul');
-        hourlyUl.style.listStyleType = "none"; // This removes the bullet points
-        hourlyUl.className = "list-group"; // Apply Bootstrap list group class
+        // Clear previous events
+        window.calendarsched.getEventSources().forEach(eventSource => eventSource.remove());
 
-        sortedHourlyData.forEach(item => {
-            const li = document.createElement('li');
-            li.className = "list-group-item"; // Apply Bootstrap list group item class
-            li.textContent = item['Hourly Interpretation'];
-            hourlyUl.appendChild(li);
-        });
-        
-        const hourlyContainer = document.getElementById('hourly-int');
-        hourlyContainer.innerHTML = ''; // Clear any existing content
-        hourlyContainer.appendChild(hourlyUl);
+        // Add new events
+        window.calendarsched.addEventSource(events);
+
+       
     }
     
     // Update Monthly Stats Chart
     
     monthTotalDurationChart.data.labels = filteredMonthlyData.map(item => monthNames[item.MONTH]);
-    monthTotalDurationChart.data.datasets[0].data = filteredMonthlyData.map(item => item['TOTAL DURATION']);
+    monthTotalDurationChart.data.datasets[0].data = filteredMonthlyData.map(item => item['TotalDuration']);
     monthTotalDurationChart.update();
 
     monthUtilChart.data.labels = filteredMonthlyData.map(item => monthNames[item.MONTH]);
@@ -906,7 +887,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
     weekFreqChart.update();
 
     weekTotalDurationChart.data.labels = filteredWeeklyData.map(item => dayNames[item['DAY OF WEEK']]);
-    weekTotalDurationChart.data.datasets[0].data = filteredWeeklyData.map(item => item['TOTAL DURATION']);
+    weekTotalDurationChart.data.datasets[0].data = filteredWeeklyData.map(item => item['TotalDuration']);
     weekTotalDurationChart.update();
 
     weekMinMaxDurChart.data.labels = filteredWeeklyData.map(item => dayNames[item['DAY OF WEEK']]);
@@ -940,7 +921,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
     hourAvgDurChart.update();
 
     hourOccuChart.data.labels = filteredHourlyData.map(item => item['HOUR'] + ':00');
-    hourOccuChart.data.datasets[0].data = filteredHourlyData.map(item => item['OCCUPANCY COUNT']);
+    hourOccuChart.data.datasets[0].data = filteredHourlyData.map(item => item['Occupancy Count']);
     hourOccuChart.update();
 
     // Years Chart
@@ -951,7 +932,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
     yearMinMaxDurChart.update();
 
     yearTotalDurationChart.data.labels = filteredYearData.map(item => item['YEAR']);
-    yearTotalDurationChart.data.datasets[0].data = filteredYearData.map(item => item['TOTAL DURATION']);
+    yearTotalDurationChart.data.datasets[0].data = filteredYearData.map(item => item['TotalDuration']);
     yearTotalDurationChart.update();
 
     yearFreqChart.data.labels = filteredYearData.map(item => item['YEAR']);
@@ -976,66 +957,50 @@ $(document).ready(function() {
     $('#equipment-select').change(updateUniqueIdSelect); // Attach the event handler
 });
 
-window.onload = function() {
-    // Get the height of col-8
-    var col8Height = document.querySelector('.col-8').offsetHeight;
 
-    // Set the height of col-4 to match col-8
-    var col4 = document.querySelector('.col-4');
-    col4.style.height = col8Height + 'px';
-};
-window.addEventListener('load', function() {
-    // Get the height of col-4
-    var col4Height = document.querySelector('.col-4').offsetHeight;
+// Calendar
+document.addEventListener('DOMContentLoaded', function() {
 
-    // Set the max-height of .box to match col-4's height
-    var boxes = document.querySelectorAll('.statbox');
-    boxes.forEach(function(box) {
-        box.style.maxHeight = col4Height - 24 + 'px';
+    document.querySelectorAll('[data-toggle="tooltip"]').forEach(tooltipTriggerEl => {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    var calendarEl = document.getElementById('schedulercal');
+
+    window.calendarsched = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'listMonth', // Change the default view to listYear to show all events
+        views: {
+            listYear: {
+                buttonText: 'Year View' // Optionally rename the button to 'Year View'
+            },
+            listMonth: {
+                buttonText: 'Month View'
+            },
+            dayGridMonth: {
+                buttonText: 'Month Events'
+            }
+        },
+        headerToolbar: {
+            left: 'prev,next', // Remove the "today" button
+            center: 'title',
+            right: 'dayGridMonth,listMonth,listYear' // Add buttons for different views
+        },
+        events: [            
+        ]
     });
 
-    var statBoxHeight = document.querySelector('.statbox').offsetHeight;
-
-    // Function to set max height and enable scrolling
-    function setMaxHeightAndScrolling(id) {
-        var element = document.getElementById(id);
-        element.style.maxHeight = statBoxHeight - 24 + 'px'; // Adjust the 24px if needed for padding
-        element.style.overflowY = 'auto'; // Add scrolling to the content
-    }
-
-    // Apply to all relevant elements
-    
-    setMaxHeightAndScrolling('monthly-int');
-    setMaxHeightAndScrolling('daily-int');
-    setMaxHeightAndScrolling('hourly-int'); 
-
-    function adjustBoxHeights(rowSelector) {
-        var rows = document.querySelectorAll(rowSelector);
-
-        rows.forEach(function(row) {
-            var infoBoxes = row.querySelectorAll('.infobox');
-            var maxHeight = 0;
-
-            // Find the maximum height in this row
-            infoBoxes.forEach(function(box) {
-                if (box.offsetHeight > maxHeight) {
-                    maxHeight = box.offsetHeight;
-                }
-            });
-
-            // Set all .infobox elements in this row to the maximum height
-            infoBoxes.forEach(function(box) {
-                box.style.height = maxHeight + 'px';
-            });
-        });
-    }
-
-    // Adjust heights for .infobox elements within the first row
-    adjustBoxHeights('.row:first-child');
-
-    // Adjust heights for .infobox elements within the second row
-    adjustBoxHeights('.row:nth-child(2)');
-
-    
+    calendarsched.render();
 });
 
+function redirectToSchedule(date) {
+    if (window.calendarsched) {
+        // Jump to the specified date
+        window.calendarsched.gotoDate(date);
+
+        window.calendarsched.changeView('listMonth');
+
+        console.log(`Redirected to ${date}`);
+    } else {
+        console.error('Calendar is not initialized.');
+    }
+}

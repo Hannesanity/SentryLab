@@ -116,10 +116,9 @@ label
 /* box section */
 .box, .infobox, .statbox, .listbox{
     border-radius: 16px;
-    overflow: auto;
-    
+    overflow: auto;    
     padding: 32px;
-    margin: 16px;
+    margin: 24px 16px 16px 16px;
 }
 
 .box, .infobox, .statbox
@@ -131,6 +130,7 @@ label
 {
     background-color: #416294;
 }
+
 
 
 .card {
@@ -320,29 +320,23 @@ tr.highlight {
 .stats-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 25px 0;
+    
     font-family: sans-serif;
+    background: rgba(0,0,0,0);
     min-width: 320px;
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
   .stats-table thead tr {
-    background-color:  #46acad; /* Blue header */
     color: #ffffff;
     text-align: left;
   }
   .stats-table th,
   .stats-table td {
-    padding: 24px 16px;
-  }
-  .stats-table tbody tr {
-    background-color: #333333 /* White cells for stats names and values */
+    padding: 16px 16px;
   }
 
-  .col-4 .statbox { /* stats */
-    max-height: 800px; /* Adjust this value based on your design needs */
-    overflow-y: auto; /* Enables vertical scrolling */
-}
+  
 .progress-container {
     position: fixed;
     left: 0;
@@ -370,3 +364,37 @@ tr.highlight {
     margin-top: 10px;
     margin-left: 10px;
   }
+
+  /* Icon Size */
+.icon-h4, .icon-h5{
+    width: 32px;
+    height: 32px;
+    margin-right: 16px;
+}
+
+/* Bold Text */
+.bold-text {
+    font-weight: bold;
+}
+
+
+/* Calendar */
+
+.maintenance-event {
+    background-color: #416294 !important; /* Maintenance color */
+    border-color: #416294 !important; /* Optional: Match border color */
+    color: white !important; /* Text color */
+}
+
+/* Style for depreciation events */
+.depreciation-event {
+    background-color: red !important; /* Depreciation color */
+    border-color: red !important; /* Optional: Match border color */
+    color: white !important; /* Text color */
+}
+
+.fc-list-event .fc-event-time {
+    color: inherit; /* Inherit the color from the event class */
+}
+
+

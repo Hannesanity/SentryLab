@@ -1,0 +1,34 @@
+[
+  {
+    "RoomName": "Electronics Laboratory #1",
+    "RoomNumber": "ENB 201"
+  },
+  {
+    "RoomName": "Electronics Laboratory #2",
+    "RoomNumber": "ENB 204"
+  },
+  {
+    "RoomName": "Electronics Laboratory #3",
+    "RoomNumber": "ENB 205"
+  },
+  {
+    "RoomName": "Civil Engineering Laboratory #1",
+    "RoomNumber": "TC 101"
+  },
+  {
+    "RoomName": "Civil Engineering Laboratory #2",
+    "RoomNumber": "TC 102"
+  },
+  {
+    "RoomName": "Chemistry Lab",
+    "RoomNumber": "ER 201"
+  },
+  {
+    "RoomName": "Others",
+    "RoomNumber": "N/A"
+  },
+  {
+    "RoomName": "Electronics Try #1",
+    "RoomNumber": "ENB 206"
+  }
+]
