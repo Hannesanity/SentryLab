@@ -47,7 +47,11 @@ if not pd.api.types.is_datetime64_any_dtype(borrower_df['DateTimeReturned']):
 
 @app.route('/')
 def index():
-    return render_template('inventory.html')
+    return render_template('room.html')
+
+@app.route('/room')
+def room():
+    return render_template('room.html')
 
 @app.route('/inventory')
 def inventory():

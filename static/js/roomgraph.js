@@ -337,14 +337,14 @@ function updateRoomStats(overallStats, roomId) {
                 // Add more updates as needed
             });
         } else {
-            document.getElementById('frequency').textContent = 'Frequency: 0';
-            document.getElementById('total-duration').textContent = 'Total Duration: 00:00';
-            document.getElementById('average-duration').textContent = 'Average Duration: 00:00';
-            document.getElementById('max-duration').textContent = 'Max Duration: 00:00';
-            document.getElementById('median-duration').textContent = 'Median Duration: 00:00';
-            document.getElementById('min-duration').textContent = 'Min Duration: 00:00';
-            document.getElementById('standard-deviation').textContent = 'Standard Deviation: 0.00';
-            document.getElementById('unique-dates').textContent = 'Unique Dates: 0';
+            document.getElementById('frequency').textContent = '0';
+            document.getElementById('total-duration').textContent = '00:00';
+            document.getElementById('average-duration').textContent = '00:00';
+            document.getElementById('max-duration').textContent = '00';
+            document.getElementById('median-duration').textContent = '00:00';
+            document.getElementById('min-duration').textContent = '00:00';
+            document.getElementById('standard-deviation').textContent = '0.00';
+            document.getElementById('unique-dates').textContent = '0';
         }})
     
 }

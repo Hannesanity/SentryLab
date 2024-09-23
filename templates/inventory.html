@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html>
 <head>
     {% extends 'base.html' %}
-    {% block title %}Predictive Maintenance Dashboard - Index{% endblock %}
+    {% block title %}Predictive Maintenance Dashboard{% endblock %}
 </head>
 <body>
     {% block content %}
@@ -11,20 +12,22 @@
             <!-- Sidebar -->
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="{{ url_for('equipment') }}">Equipment</a>
-                <a href="{{ url_for('index') }}">Inventory</a>
-                <a href="#" id="updateButton">Update Stats</a>
-                <a href="#" id="trainButton">Train</a>
+                <a href="{{ url_for('equipment') }}" class="custom-sidenav-opt {% if request.endpoint == 'equipment' %}active{% endif %}"><img src="{{ url_for('static', filename='img/equipment.png') }}" alt="Equipment" class="icon-h4">Equipment</a>
+                <a href="{{ url_for('room') }}" class="custom-sidenav-opt {% if request.endpoint == 'room' %}active{% endif %}"><img src="{{ url_for('static', filename='img/room.png') }}" alt="Room" class="icon-h4">Room</a>
+                <a href="{{ url_for('inventory') }}" class="custom-sidenav-opt {% if request.endpoint == 'inventory' %}active{% endif %}"><img src="{{ url_for('static', filename='img/inventory.png') }}" alt="Inventory" class="icon-h4">Inventory</a>
+                <a href="#" id="updateButton" class="custom-sidenav-opt"><img src="{{ url_for('static', filename='img/update.png') }}" alt="Update Stats" class="icon-h4"> Update Stats</a>
+                <a href="#" id="trainButton" class="custom-sidenav-opt"><img src="{{ url_for('static', filename='img/train.png') }}" alt="Train" class="icon-h4"> Train</a>
             </div>
-            <!-- Main Content -->
-            <div class="col-12">
+            
+             <!-- Main Content -->
+            <div id="main" class="col-12">
                 <div class="header">
                     <!-- Title on the left side -->
                     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
                     <h1 class="header-title">Predictive Maintenance Dashboard</h1>
                     <!-- Placeholder icons on the right side -->
                     <div class="header-icons">
-                        
+                      
                     </div>
                 </div>
                 <nav class="navbar navbar-expand-lg navbar-light">
@@ -34,223 +37,173 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Overall<a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-filter="inventory">Inventory</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">ENB201</a>
+                                <a class="nav-link" href="#" data-filter="borrower">Borrower's Slip</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">ENB204</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">ENB205</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">TC101</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">TC102</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">ER201</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Others</a>
-                            </li>
+                                <a class="nav-link" href="#" data-filter="calibration">Calibration</a>
+                            </li>                       
                         </ul>
-                    
                     </div>
                 </nav>
-
-                <div class="row">
-                    <!-- Room Information Card -->
-                    <div class="col-3" id="roomInfo" >
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Room Information</h5>
-                                <div class="row">
-                                    <div class="col-4 border-right"><span id="room-name">Room Name:</span></div>
-                                    <div class="col-4 border-right"><span id="room-number">Room Number:</span></div>
-                                    <div class="col-4"><span id="total-equipments">Total Equipments: 10</span></div>
-                                </div>
-                                <!-- Other room information -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Usage Analysis Card -->
-                    <div class="col-3" id="usageAnalysis">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Usage Analysis</h5>
-                                <div class="row">
-                                    <div class="col-4 border-right"><span id="frequency">Frequency: 30</span></div>
-                                    <div class="col-4 border-right"><span id="unique-dates">Unique Dates: 14</span></div>
-                                    <div class="col-4"><span id="total-duration">Total Duration: 275.75</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Duration Analysis Card -->
-                    <div class="col-3" id="durationAnalysis">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Duration Analysis</h5>
-                                <div class="row">
-                                    <div class="col-4 border-right"><span id="average-duration">Average Duration: 9.19</span></div>
-                                    <div class="col-4 border-right"><span id="max-duration">Max Duration: 23.5</span></div>
-                                    <div class="col-4"><span id="median-duration">Median Duration: 5.13</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3" id="additionalStats">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Additional Stats</h5>
-                                <div class="row">
-                                    <div class="col-4"><span id="min-duration">Min Duration:</span></div>
-                                    <div class="col-4"><span id="standard-deviation">Standard Deviation:</span></div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-        
-                <div class="row" data-filter="overall">
-                    <div class="col-4">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="overallfrequencyChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="overalldurationSumChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="overalldurationMeanChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row" data-filter="overall">
-                    <div class="col-3">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="quarter1Chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="quarter2Chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="quarter3Chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="quarter4Chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-4">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="roomBorrowedChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="roomDurationChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card equipcard">
-                            <div class="box">
-                                <canvas id="roomAverageChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-8">
+           
+                <div class="col-12">
+                    <div class="infobox">
                         <div class="box">
-                            <h4>Equipments List</h4>
-                            
-                            <table class="table table-striped mt-3 hover" id="roomstats">
-
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="statbox" style="max-height: 460px;">
-                            <h4>Schedules</h4>
-                            <div id="scheduleDisplay"></div>
-                            <!-- Additional statistics for day here -->
-                        </div>
-                        <div class="statbox" style="max-height: 460px;">
-                            <h4>Equipment Details</h4>
-                            <p><span id="interpretationList"></span></p>
-                            
-                            <!-- Additional statistics for day here -->
+                            <input type="file" id="fileInput" class="form-control-file" multiple>
+                            <button class="btn btn-primary mt-3" id="uploadBtn">Upload</button>
+                            <button class="btn btn-primary mt-3" id="addBtn">Add Data</button>
+                            <button class="btn btn-primary mt-3" id="addRoomBtn">Add Room List</button>
+                            <button class="btn btn-primary mt-3" id="exportBtn">Export</button>
+                            <div class="row" data-filter="inventory" style="display: none;">
+                                <h2>Inventory Data</h2>
+                                <table class="table table-striped mt-3" id="inventory-table">
+                                    <thead>
+                                        <tr>
+                                            <th>UniqueID</th>
+                                            <th>Equipment Name</th>
+                                            <th>Room</th>
+                                            <th>Item No.</th>
+                                            <th>Serial No.</th>
+                                            <th>Brand</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                    
+                            <div class="row" data-filter="borrower">
+                                <h2>Borrower's Slip Data</h2>
+                                <table class="table table-striped mt-3" id="borrower-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Transaction ID</th>
+                                            <th>UniqueID</th>
+                                            <th>Equipment Name</th>
+                                            <th>DateTime Borrowed</th>
+                                            <th>DateTime Returned</th>
+                                            <th>Total Duration</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                    
+                            <div class="row" data-filter="calibration" style="display: none;">
+                                <h2>Calibration Data</h2>
+                                <table class="table table-striped mt-3" id="calibration-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Calibration ID</th>
+                                            <th>UniqueID</th>
+                                            <th>Type of Service</th>
+                                            <th>Description</th>
+                                            <th>Manufacturer</th>
+                                            <th>Model Number</th>
+                                            <th>Serial Number</th>
+                                            <th>Procedure Number</th>
+                                            <th>As Left</th>
+                                            <th>Order Number</th>
+                                            <th>Calibration Location</th>
+                                            <th>Date Received</th>
+                                            <th>Calibration Date</th>
+                                            <th>Calibration Due</th>
+                                            <th>Relative Humidity</th>
+                                            <th>Ambient Temperature</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="container mt-5">
-                    <div class="row">
-                      <div class="col">
-                        <h3>Status: <span id="statusMessage">Processing...</span></h3>
-                      </div>
-                    </div>
-                  </div>
-                
-                  <div class="progress-container">
-                    <div class="progress">
-                      <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        <span id="progressLabel" class="progress-label">0%</span>
-                      </div>
-                    </div>
-                    <div class="progress-text">Processing...</div>
-                  </div>
-
-                
-
             </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='js/legitcalendar.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="{{ url_for('static', filename='js/table.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/roomgraph.js') }}"></script>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="addDataModal" tabindex="-1" role="dialog" aria-labelledby="addDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="addDataModalLabel">Add Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body" id="form-content">
+            <!-- Form content will be inserted here -->
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveDataBtn">Save</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Add Room Modal -->
+    <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRoomModalLabel">Add Room</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addRoomForm">
+                        <div class="mb-3">
+                            <label for="roomNumber" class="form-label">Room Number</label>
+                            <input type="text" class="form-control" id="roomNumber" placeholder="Enter Room Number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="roomName" class="form-label">Room Name</label>
+                            <input type="text" class="form-control" id="roomName" placeholder="Enter Room Name" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveRoomBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Update Data Modal -->
+    <div class="modal fade" id="updateDataModal" tabindex="-1" aria-labelledby="updateDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="updateDataModalLabel">Update Data</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <form id="updateDataForm">
+                <!-- Form fields for updating data will be inserted here dynamically -->
+            </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveUpdatedDataBtn">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  
+  
+
   {% endblock %}
 
 </body>

@@ -487,7 +487,7 @@ def calculate_equipment():
     
     
     def get_most_frequent_month(x):
-        if pd.api.types.is_datetime64_any_dtype(x['DATE']):
+        if pd.api.types.is_datetime64_any_dtype(x['DateBorrowed']):
             return x['DateBorrowed'].dt.month_name().mode()[0]
         else:
             return 'N/A'

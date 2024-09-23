@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% extends 'base.html' %}
+    {% block title %}Predictive Maintenance Dashboard{% endblock %}
+</head>
+<body>
+    {% block content %}
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="{{ url_for('equipment') }}" class="custom-sidenav-opt {% if request.endpoint == 'equipment' %}active{% endif %}"><img src="{{ url_for('static', filename='img/equipment.png') }}" alt="Equipment" class="icon-h4">Equipment</a>
+                <a href="{{ url_for('room') }}" class="custom-sidenav-opt {% if request.endpoint == 'room' %}active{% endif %}"><img src="{{ url_for('static', filename='img/room.png') }}" alt="Room" class="icon-h4">Room</a>
+                <a href="{{ url_for('inventory') }}" class="custom-sidenav-opt {% if request.endpoint == 'inventory' %}active{% endif %}"><img src="{{ url_for('static', filename='img/inventory.png') }}" alt="Inventory" class="icon-h4">Inventory</a>
+                <a href="#" id="updateButton" class="custom-sidenav-opt"><img src="{{ url_for('static', filename='img/update.png') }}" alt="Update Stats" class="icon-h4"> Update Stats</a>
+                <a href="#" id="trainButton" class="custom-sidenav-opt"><img src="{{ url_for('static', filename='img/train.png') }}" alt="Train" class="icon-h4"> Train</a>
+            </div>
+            
+             <!-- Main Content -->
+            <div id="main" class="col-12">
+                <div class="header">
+                    <!-- Title on the left side -->
+                    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>
+                    <!-- Placeholder icons on the right side -->
+                    <div class="header-icons">
+                      
+                    </div>
+                </div>
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="#">Inventory Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav mr-auto" id="navbarItems">
+                            <!-- Navbar items will be inserted here -->
+                        </ul>
+                    </div>
+                </nav>
+
+                               
+                <div class="row">
+                    <div class="col-4" id="dataAnalysis"> 
+                        <div class="infobox">
+                            <table class="stats-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <h5 class="bold-text">
+                                                <img src="{{ url_for('static', filename='img/room.png') }}" class="icon-h5">
+                                                <span data-toggle="tooltip" title="Displays detailed information about the room.">Room Information</span>
+                                            </h5>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Name of the room being analyzed.">Room Name:</td>
+                                        <td id="room-name"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Specific number or identifier of the room.">Room Number:</td>
+                                        <td id="room-number"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Total number of equipments inside the room.">Total Equipments inside the Room:</td>
+                                        <td id="total-equipments"></td>
+                                    </tr>
+                                </tbody>
+                            </table>  
+                        </div>
+                        
+                        <div class="infobox">
+                            <table class="stats-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <h5 class="bold-text">
+                                                <img src="{{ url_for('static', filename='img/data-analysis.png') }}" class="icon-h5">
+                                                <span data-toggle="tooltip" title="Provides an analysis of room transactions and equipment usage.">Room Analysis</span>
+                                            </h5>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Total number of equipment transactions recorded.">Transactions Count:</td>
+                                        <td id="frequency"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Count of unique dates when transactions occurred.">Unique Dates of Transactions:</td>
+                                        <td id="unique-dates"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Sum of all durations for equipment usage.">Total Duration of Equipment's Usage:</td>
+                                        <td id="total-duration"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Average time duration of equipment usage.">Average Duration of Equipment's Usage:</td>
+                                        <td id="average-duration"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Longest recorded duration of equipment usage.">Maximum Duration of Equipment's Usage:</td>
+                                        <td id="max-duration"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Middle value of the duration dataset for equipment usage.">Median Duration of Equipment's Usage:</td>
+                                        <td id="median-duration"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Shortest recorded duration of equipment usage.">Minimum Duration of Equipment's Usage:</td>
+                                        <td id="min-duration"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold-text" data-toggle="tooltip" title="Measure of variation in the equipment usage durations.">Standard Deviation of Equipment's Usage:</td>
+                                        <td id="standard-deviation"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> 
+                        
+                        <div class="statbox">
+                            <div id='calendar'></div>                            
+                        </div>                                                  
+                    </div>                   
+                    
+
+                    <div class="col-4">
+                        <div class="col-12">
+                            <div class="card equipcard">
+                                <div class="box" data-toggle="tooltip" title="Room Borrowed Chart: Displays the count of borrowed equipment over time.">
+                                    <canvas id="roomBorrowedChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card equipcard">
+                                <div class="box" data-toggle="tooltip" title="Room Duration Chart: Shows the total duration of equipment usage in the room.">
+                                    <canvas id="roomDurationChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card equipcard">
+                                <div class="box" data-toggle="tooltip" title="Room Average Chart: Displays the average usage duration of equipment in the room.">
+                                    <canvas id="roomAverageChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box" data-toggle="tooltip" title="Quarter 1 Chart: Analysis of equipment usage in the first quarter.">
+                                        <canvas id="quarter1Chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box" data-toggle="tooltip" title="Quarter 2 Chart: Analysis of equipment usage in the second quarter.">
+                                        <canvas id="quarter2Chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box" data-toggle="tooltip" title="Quarter 3 Chart: Analysis of equipment usage in the third quarter.">
+                                        <canvas id="quarter3Chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box" data-toggle="tooltip" title="Quarter 4 Chart: Analysis of equipment usage in the fourth quarter.">
+                                        <canvas id="quarter4Chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                    <!-- Usage Analysis Card -->
+                    <div class="col-4">                       
+                        <div class="statbox">
+                            <h4 class="bold-text">Equipments List</h4>                            
+                            <label for="inventory-select" data-toggle="tooltip" title="Select an equipment to view its statistics.">Equipment Name:</label>
+                            <select id="inventory-select" class="form-select"></select>                            
+                            <table class="stats-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <h5 class="bold-text">
+                                                <img src="{{ url_for('static', filename='img/info.png') }}" class="icon-h5">
+                                                Equipment Information
+                                            </h5>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    <tr data-toggle="tooltip" title="Displays the quantity of the equipment.">
+                                        <td class="bold-text">Quantity:</td>
+                                        <td id="eqstat-qty"></td>
+                                    </tr>                                    
+                                    <tr data-toggle="tooltip" title="Shows the room where the equipment is located.">
+                                        <td class="bold-text">Room:</td>
+                                        <td id="eqstat-room"></td>
+                                    </tr>                                   
+                                    <tr data-toggle="tooltip" title="Total number of transactions involving the equipment.">                                        
+                                        <td class="bold-text">Transactions Count:</td>
+                                        <td id="eqstat-frequency"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Count of unique dates when the equipment was used.">
+                                        <td class="bold-text">Unique Dates of Transactions:</td>
+                                        <td id="eqstat-unique-dates"></td>
+                                    </tr>                                   
+                                    <tr data-toggle="tooltip" title="The type of maintenance recommended for the equipment.">
+                                        <td class="bold-text">Maintenance Type:</td>
+                                        <td id="eqstat-maintenance-type"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="The frequency at which the equipment should be maintained.">
+                                        <td class="bold-text">Maintenance Frequency:</td>
+                                        <td id="eqstat-maintenance-frequency"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Current status of the equipment (active, inactive, etc.).">
+                                        <td class="bold-text">Status:</td>
+                                        <td id="eqstat-status"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="The most common day of the week when the equipment is used.">
+                                        <td class="bold-text">Most Frequent Day:</td>
+                                        <td id="eqstat-most-freq-day"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="The most common month when the equipment is used.">
+                                        <td class="bold-text">Most Frequent Month:</td>
+                                        <td id="eqstat-most-freq-month"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Quarter with the highest usage of the equipment.">
+                                        <td class="bold-text">Peak Quarter:</td>
+                                        <td id="eqstat-peak-quarter"></td>
+                                    </tr>                                   
+                                </tbody>
+                            </table>
+                            <table class="stats-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <h5 class="bold-text">
+                                                <img src="{{ url_for('static', filename='img/info.png') }}" class="icon-h5">
+                                                Equipment Statistics
+                                            </h5>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                  
+                                    <tr data-toggle="tooltip" title="Total duration the equipment has been used.">
+                                        <td class="bold-text">Total Duration of Equipment's Usage:</td>
+                                        <td id="eqstat-total"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Average duration per usage of the equipment.">
+                                        <td class="bold-text">Average Duration of Equipment's Usage:</td>
+                                        <td id="eqstat-avg"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Longest single duration the equipment was used.">
+                                        <td class="bold-text">Maximum Duration of Equipment's Usage:</td>
+                                        <td id="eqstat-max"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Median duration of all equipment usage instances.">
+                                        <td class="bold-text">Median Duration of Equipment's Usage:</td>
+                                        <td id="eqstat-median"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Shortest single duration the equipment was used.">
+                                        <td class="bold-text">Minimum Duration of Equipment's Usage:</td>
+                                        <td id="eqstat-min"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Measures the variability in equipment usage duration.">
+                                        <td class="bold-text">Standard Deviation of Equipment's Usage:</td>
+                                        <td id="eqstat-std-dev"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Date when the equipment was first borrowed.">
+                                        <td class="bold-text">First Borrow Date:</td>
+                                        <td id="eqstat-first-bor"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Date when the equipment was first returned.">
+                                        <td class="bold-text">First Return Date:</td>
+                                        <td id="eqstat-first-ret"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Date of the most recent borrow.">
+                                        <td class="bold-text">Last Borrow Date:</td>
+                                        <td id="eqstat-last-bor"></td>
+                                    </tr>
+                                    <tr data-toggle="tooltip" title="Date of the most recent return.">
+                                        <td class="bold-text">Last Return Date:</td>
+                                        <td id="eqstat-last-ret"></td>
+                                    </tr>                                   
+                                </tbody>
+                            </table>                                   
+                        </div>                                                
+                    </div>
+                    
+                </div>
+
+                
+
+                <div class="container mt-5">
+                    <div class="row">
+                      <div class="col">
+                        <h3>Status: <span id="statusMessage">Processing...</span></h3>
+                      </div>
+                    </div>
+                  </div>
+                
+                  <div class="progress-container">
+                    <div class="progress">
+                      <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <span id="progressLabel" class="progress-label">0%</span>
+                      </div>
+                    </div>
+                    <div class="progress-text">Processing...</div>
+                  </div>
+
+                
+
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/table.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/roomgraph.js') }}"></script>
+  {% endblock %}
+
+</body>
+</html>

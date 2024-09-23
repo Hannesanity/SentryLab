@@ -28,6 +28,7 @@ label
     color: black;
 }
 
+
 /* Base styles for sidenav */
 .sidenav {
     width: 0px;
@@ -290,6 +291,10 @@ canvas {
 
 .navbar-nav .nav-link.active {
     border-bottom: 3px solid #007bff; /* Blue border for the active item */
+}
+
+.custom-sidenav-opt.active{
+    background-color: #6A94C5;
 }
 
 .form{

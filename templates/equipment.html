@@ -2,23 +2,24 @@
 <html>
 <head>
     {% extends 'base.html' %}
-    {% block title %}Predictive Maintenance Dashboard - Index{% endblock %}
+    {% block title %}Predictive Maintenance Dashboard{% endblock %}
 </head>
 <body>
     {% block content %}
-  <!-- Sidebar -->
+    
     <div class="container-fluid">
         <div class="row">
-             <!-- Sidebar -->
+            <!-- Sidebar -->
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="{{ url_for('equipment') }}">Equipment</a>
-                <a href="{{ url_for('index') }}">Inventory</a>
-                <a href="#" id="updateButton">Update Stats</a>
-                <a href="#" id="trainButton">Train</a>
+                <a href="{{ url_for('equipment') }}" class="custom-sidenav-opt {% if request.endpoint == 'equipment' %}active{% endif %}"><img src="{{ url_for('static', filename='img/equipment.png') }}" alt="Equipment" class="icon-h4">Equipment</a>
+                <a href="{{ url_for('room') }}" class="custom-sidenav-opt {% if request.endpoint == 'room' %}active{% endif %}"><img src="{{ url_for('static', filename='img/room.png') }}" alt="Room" class="icon-h4">Room</a>
+                <a href="{{ url_for('inventory') }}" class="custom-sidenav-opt {% if request.endpoint == 'inventory' %}active{% endif %}"><img src="{{ url_for('static', filename='img/inventory.png') }}" alt="Inventory" class="icon-h4">Inventory</a>
+                <a href="#" id="updateButton" class="custom-sidenav-opt"><img src="{{ url_for('static', filename='img/update.png') }}" alt="Update Stats" class="icon-h4"> Update Stats</a>
+                <a href="#" id="trainButton" class="custom-sidenav-opt"><img src="{{ url_for('static', filename='img/train.png') }}" alt="Train" class="icon-h4"> Train</a>
             </div>
              <!-- Main Content -->
-            <div id="main">
+            <div id="main" class="col-12">
                 <div class="header">
                     <!-- Title on the left side -->
                     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
@@ -119,235 +120,230 @@
                     </div>
                     <div class="row">
                         <!-- Cards -->
-                        <div class="col-md-4 col-lg-4"  data-filter="overall">
+                        <div class="col-md-4 col-lg-4">
                             <div class="infobox">
-                                <p class="card-title">Usage Frequency and Duration</p>
                                 <table class="stats-table">
                                     <thead>
-                                      <tr>
-                                        <th colspan="2">Usage Frequency</th>
-                                      </tr>
+                                        <tr>
+                                            <th colspan="2">
+                                                <h5 class="bold-text">
+                                                    <img src="{{ url_for('static', filename='img/frequency.png') }}" class="icon-h5">Usage Frequency
+                                                </h5>
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                      <tr>
-                                        <td>Total Frequency</td>
-                                        <td id="total-qty"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Total Duration</td>
-                                        <td id="total-dur"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Average Duration</td>
-                                        <td id="avg-duration"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Maximum Duration</td>
-                                        <td id="max-dur"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Minimum Duration</td>
-                                        <td id="min-dur"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Typical Duration</td>
-                                        <td id="median-dur"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Late Borrows</td>
-                                        <td id="late-return"></td>
-                                      </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The total number of transactions involving this equipment.">Total Transactions:</td>
+                                            <td id="total-qty"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The total duration of all transactions in which the equipment was borrowed.">Total Duration of the Transactions:</td>
+                                            <td id="total-dur"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The average time the equipment was borrowed per transaction.">Average Duration of the Transactions:</td>
+                                            <td id="avg-duration"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The longest single transaction duration involving this equipment.">Maximum Duration of the Transactions:</td>
+                                            <td id="max-dur"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The shortest single transaction duration involving this equipment.">Minimum Duration of the Transactions:</td>
+                                            <td id="min-dur"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The typical or middle value duration of transactions, indicating central tendency.">Typical Duration of the Transactions:</td>
+                                            <td id="median-dur"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="Instances where the equipment was returned later than the expected time.">Late Return of the Equipment:</td>
+                                            <td id="late-return"></td>
+                                        </tr>
                                     </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="infobox">
+                                <table class="stats-table">
                                     <thead>
                                         <tr>
-                                          <th colspan="2">Temporal Patterns</th>
+                                            <th colspan="2">
+                                                <h5 class="bold-text">
+                                                    <img src="{{ url_for('static', filename='img/time.png') }}" class="icon-h5">Temporal Patterns
+                                                </h5>
+                                            </th>
                                         </tr>
-                                      </thead>
-                                      <tbody>
-                                      <tr>
-                                        <td>First Borrow Date</td>
-                                        <td id="firstdatebor"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Last Borrow Date</td>
-                                        <td id="lastdatebor"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>First Return Date</td>
-                                        <td id="firstdateret"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Last Return Date</td>
-                                        <td id="lastdateret"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Most Frequent Day</td>
-                                        <td id="most-freq-day"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Most Frequent Month</td>
-                                        <td id="most-freq-month"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Unique Dates</td>
-                                        <td id="unique-dates"></td>
-                                      </tr>
-                                      </tbody>
-                                      <thead>
+                                    </thead>
+                                    <tbody>
                                         <tr>
-                                          <th colspan="2">Statistical Computations</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                      <tr>
-                                        <td>Correlations</td>
-                                        <td id="correlation"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Outliers</td>
-                                        <td id="outliers"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Standard Deviation Duration</td>
-                                        <td id="std-dev-dur"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Range Duration</td>
-                                        <td id="range-duration"></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Calibration Due</td>
-                                        <td id="calib-due"></td>
-                                      </tr>
-                                      </tbody>
-                                      <thead>
-                                        <tr>
-                                          <th colspan="2">Maintenance Information</th>
-                                        </tr>
-                                      <tbody>
-                                        <tr>
-                                            <td>Maintenance Type</td>
-                                            <td id="mainte-type"></td>
-                                          </tr>
-                                          <tr>
-                                            <td>Maintenance Frequency</td>
-                                            <td id="mainte-freq"></td>
-                                          </tr>
-                                        <tr>
-                                            <td>Days Since Last Maintenance</td>
-                                            <td id="last-calib"></td>
+                                            <td class="bold-text" data-toggle="tooltip" title="The date when the equipment was first borrowed.">First Borrow Date:</td>
+                                            <td id="firstdatebor"></td>
                                         </tr>
                                         <tr>
-                                            <td>Maintenance Due</td>
-                                            <td id="calib-due"></td>
+                                            <td class="bold-text" data-toggle="tooltip" title="The most recent date when the equipment was borrowed.">Last Borrow Date:</td>
+                                            <td id="lastdatebor"></td>
                                         </tr>
-             
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The date when the equipment was first returned.">First Return Date:</td>
+                                            <td id="firstdateret"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The most recent date when the equipment was returned.">Last Return Date:</td>
+                                            <td id="lastdateret"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The day of the week when the equipment was most frequently borrowed.">Most Frequent Day that the Equipment was Borrowed:</td>
+                                            <td id="most-freq-day"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The month during which the equipment was most frequently borrowed.">Most Frequent Month that the Equipment was Borrowed:</td>
+                                            <td id="most-freq-month"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The number of unique dates the equipment was borrowed.">Unique Dates that the Equipment was Borrowed:</td>
+                                            <td id="unique-dates"></td>
+                                        </tr>
                                     </tbody>
-                                    </table>
+                                </table>
+                            </div>
+                        
+                            <div class="infobox">
+                                <table class="stats-table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">
+                                                <h5 class="bold-text">
+                                                    <img src="{{ url_for('static', filename='img/statistics.png') }}" class="icon-h5">Statistical Computations
+                                                </h5>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="Data points that deviate significantly from other observations.">Outliers:</td>
+                                            <td id="outliers"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="A measure of variability that shows how much the durations deviate from the average.">Standard Deviation of the TimeDuration:</td>
+                                            <td id="std-dev-dur"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="The difference between the maximum and minimum transaction durations.">Range of the Time Duration:</td>
+                                            <td id="range-duration"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                        
                     
-                        <div class="col-md-4 col-lg-4"  data-filter="overall">
+                        <div class="col-md-4 col-lg-4">
                             <div class="infobox">
-                                <p class="card-title">Predicted Health</p>
+                                <h4 class="bold-text">
+                                    <img src="{{ url_for('static', filename='img/health.png') }}" class="icon-h4">Predicted Health
+                                </h4>
                                 <div class="row cardrow">
                                     <div class="col-6 d-flex">
                                         <div class="card infocard h-75 w-75">
                                             <div class="card-body">
-                                                <h4><span id="predicted-rul-mlr1"></span></h4>
-                                                <p class="card-text">MLR Predicted Remaining Useful Life</p>
+                                                <h4><span id="predicted-rul-mlr1" data-toggle="tooltip" title="Predicted remaining useful life based on the MLR model."></span></h4>
+                                                <p class="card-text" data-toggle="tooltip" title="Multivariate Linear Regression (MLR) model estimation of remaining useful life.">MLR Predicted Remaining Useful Life</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6 d-flex">
                                         <div class="card infocard h-75 w-75">
                                             <div class="card-body">
-                                                <h4><canvas id="health-percentage-mlr1" width="100" height="100"></canvas></h4>
-                                                <p class="card-text">MLR Health Percentage</p>
+                                                <h4><canvas id="health-percentage-mlr1" width="100" height="100" data-toggle="tooltip" title="Health percentage estimated using the MLR model."></canvas></h4>
+                                                <p class="card-text" data-toggle="tooltip" title="MLR model's estimated health of the equipment.">MLR Health Percentage</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6 d-flex">
                                         <div class="card infocard h-75 w-75">
                                             <div class="card-body">
-                                                <h4><span id="predicted-rul-knn"></span></h4>
-                                                <p class="card-text">KNN Predicted Remaining Useful Life</p>
+                                                <h4><span id="predicted-rul-knn" data-toggle="tooltip" title="Predicted remaining useful life based on the KNN model."></span></h4>
+                                                <p class="card-text" data-toggle="tooltip" title="K-Nearest Neighbors (KNN) model estimation of remaining useful life.">KNN Predicted Remaining Useful Life</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6 d-flex">
                                         <div class="card infocard h-75 w-75">
                                             <div class="card-body">
-                                                <h4><canvas id="equipment-health-knn" width="100" height="100"></canvas></h4>
-                                                <p class="card-text">KNN Health Percentage</p>
+                                                <h4><canvas id="equipment-health-knn" width="100" height="100" data-toggle="tooltip" title="Health percentage estimated using the KNN model."></canvas></h4>
+                                                <p class="card-text" data-toggle="tooltip" title="KNN model's estimated health of the equipment.">KNN Health Percentage</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6 d-flex">
                                         <div class="card infocard h-75 w-75">
                                             <div class="card-body">
-                                                <h4><span id="predicted-rul-svr"></span></h4>
-                                                <p class="card-text">SVR Predicted Remaining Useful Life</p>
+                                                <h4><span id="predicted-rul-svr" data-toggle="tooltip" title="Predicted remaining useful life based on the SVR model."></span></h4>
+                                                <p class="card-text" data-toggle="tooltip" title="Support Vector Regression (SVR) model estimation of remaining useful life.">SVR Predicted Remaining Useful Life</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6 d-flex">
                                         <div class="card infocard h-75 w-75">
                                             <div class="card-body">
-                                                <h4><canvas id="equipment-health-svr" width="100" height="100"></canvas></h4>
-                                                <p class="card-text">SVR Health Percentage</p>
+                                                <h4><canvas id="equipment-health-svr" width="100" height="100" data-toggle="tooltip" title="Health percentage estimated using the SVR model."></canvas></h4>
+                                                <p class="card-text" data-toggle="tooltip" title="SVR model's estimated health of the equipment.">SVR Health Percentage</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="stats-table">
-                                        <thead>
-                                          <tr>
-                                            <th colspan="2">Maintenance Schedules</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <td>MLR Maintenance Date</td>
-                                            <td id='next-maintenance-date-mlr'></td>
-                                          </tr>
-                                          <tr>
-                                            <td>KNN Maintenance Date</td>
-                                            <td id="next-maintenance-date-knn"></td>
-                                          </tr>
-                                          <tr>
-                                            <td>SVR Maintenance Date</td>
-                                            <td id="next-maintenance-date-svr"></td>
-                                          </tr>
-                                          </tbody>
-                                          <tbody>
-                                            <thead>
-                                                <tr>
-                                                  <th colspan="2">Depreciation Date</th>
-                                                </tr>
-                                              </thead>
-                                            <tr>
-                                              <td>MLR Depreciation Date</td>
-                                              <td id='depreciation-date-mlr'></td>
-                                            </tr>
-                                            <tr>
-                                              <td>KNN depreciation Date</td>
-                                              <td id="depreciation-date-knn"></td>
-                                            </tr>
-                                            <tr>
-                                              <td>SVR depreciation Date</td>
-                                              <td id="depreciation-date-svr"></td>
-                                            </tr>
-                                            </tbody>
-                                          </table>
-                                          
                                 </div>
-                            </div>  
+                            </div>
+                            
+                            <div class="statbox">
+                                <h4 class="bold-text"><img src="{{ url_for('static', filename='img/calendar.png') }}" class="icon-h4">Schedules</h4>
+                                <div id="schedulercal"></div>
+                            </div>
+
+                            <div class="infobox">
+                                <table class="stats-table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">
+                                                <h5 class="bold-text">
+                                                    <img src="{{ url_for('static', filename='img/info.png') }}" class="icon-h5">Maintenance Information
+                                                </h5>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="Type of maintenance applied to the equipment.">Type of Maintenance</td>
+                                            <td id="mainte-type"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="Number of times maintenance should occur based on the schedule.">Times that the Equipment should be Maintenanced:</td>
+                                            <td id="mainte-freq"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="Number of days since the last maintenance was performed.">Days Since Last Maintenance:</td>
+                                            <td id="last-calib"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="Indicates when the next calibration is due.">Calibration Due:</td>
+                                            <td id="calib-due"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="bold-text" data-toggle="tooltip" title="Next scheduled maintenance date.">Maintenance Due</td>
+                                            <td id="calib-due"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="col-md-4 col-lg-4"  data-filter="overall">
+
+                        <div class="col-md-4 col-lg-4" data-filter="overall">
                             <div class="col-12">
                                 <div class="card equipcard">
                                     <div class="box">
-                                        <p>Yearly Total Duration</p>
+                                        <h5 data-toggle="tooltip" title="Displays the total duration of events recorded throughout the year.">Yearly Total Duration</h5>
                                         <canvas id="yearTotalDur"></canvas>
                                     </div>
                                 </div>
@@ -355,7 +351,7 @@
                             <div class="col-12">
                                 <div class="card equipcard">
                                     <div class="box">
-                                        <p>Yearly Frequency</p>
+                                        <h5 data-toggle="tooltip" title="Shows the frequency of events recorded over the year.">Yearly Frequency</h5>
                                         <canvas id="yearFreq"></canvas>
                                     </div>
                                 </div>
@@ -363,7 +359,7 @@
                             <div class="col-12">
                                 <div class="card equipcard">
                                     <div class="box">
-                                        <p>Yearly Utilization</p>
+                                        <h5 data-toggle="tooltip" title="Indicates how resources were utilized over the year.">Yearly Utilization</h5>
                                         <canvas id="yearUtil"></canvas>
                                     </div>
                                 </div>
@@ -371,169 +367,122 @@
                             <div class="col-12">
                                 <div class="card equipcard">
                                     <div class="box">
-                                        <p>Yearly Min-Max Duration</p>
+                                        <h5 data-toggle="tooltip" title="Displays minimum, maximum, and average durations for the year.">Yearly Min-Max Duration</h5>
                                         <canvas id="yearMinMaxDur"></canvas>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12" data-filter="overall">  
-                                <div class="statbox" style="max-height: 500px">
-                                    <div class="row">                          
-                                        <h4>Graph Summary</h4>
-                                        <p><span id="yearly-int">...</span></p>
-                                    </div>
-                                </div>
-                                    <!-- Additional statistics for year here -->                         
-                            </div> 
-                            
                         </div>
-                    </div>
-                    
-                        <!-- Monthly Data Section -->
                         
-                    <div class="row">
-                        <div class="col-8" data-filter="month">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="card equipcard">
-                                        <div class="box">
-                                            <p>Monthly Total Duration</p>
-                                            <canvas id="monthTotalDur"></canvas>
-                                        </div>
+                        <div class="col-md-4 col-lg-4" data-filter="month">
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Displays the total duration of events recorded for the month.">Monthly Total Duration</h5>
+                                        <canvas id="monthTotalDur"></canvas>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="card equipcard">
-                                        <div class="box">
-                                            <p>Monthly Utilization</p>
-                                            <canvas id="monthUtil"></canvas>
-                                        </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Indicates how resources were utilized during the month.">Monthly Utilization</h5>
+                                        <canvas id="monthUtil"></canvas>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="card equipcard">
-                                        <div class="box">
-                                            <p>Monthly Min-Max Duration</p>
-                                            <canvas id="monthMinMaxDur"></canvas>
-                                        </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Shows minimum, maximum, and average durations for the month.">Monthly Min-Max Duration</h5>
+                                        <canvas id="monthMinMaxDur"></canvas>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="card equipcard">
-                                        <div class="box">
-                                            <p>Monthly Frequency</p>
-                                            <canvas id="monthFreq"></canvas>
-                                        </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Shows the frequency of events during the month.">Monthly Frequency</h5>
+                                        <canvas id="monthFreq"></canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="col-4" data-filter="month">
-                            <div class="statbox">
-                                <h4>Months in a Year Graph Summary</h4>
-                                <p><span id="monthly-int">...</span></p>
-                                <!-- Additional statistics for year here -->
-                            </div>
-                        </div>
-                    </div>
                         <!-- Weekly Data Section -->
-                        <div class="row">
-                            <div class="col-8" data-filter="week">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="card equipcard">
-                                            <div class="box">
-                                                <p>Weekly Frequency</p>
-                                                <canvas id="weekFreq"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card equipcard">
-                                            <div class="box">
-                                                <p>Weekly Total Duration</p>
-                                                <canvas id="weekTotalDur"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card equipcard">
-                                            <div class="box">
-                                                <p>Weekly Duration</p>
-                                                <canvas id="weekMinMaxDur"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card equipcard">
-                                            <div class="box">
-                                                <p>Weekly Utilization</p>
-                                                <canvas id="weekUtil"></canvas>
-                                            </div>
-                                        </div>
+                        
+                        <div class="col-md-4 col-lg-4" data-filter="week">
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Displays the frequency of events occurring weekly.">Weekly Frequency</h5>
+                                        <canvas id="weekFreq"></canvas>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4" data-filter="week">
-                                    <div class="statbox">
-                                        <h4>Weekly Graph Summary</h4>
-                                        <p><span id="daily-int"></span></p>
-                                        <!-- Additional statistics for week here -->
-                                    </div>
-                            </div>
-                        </div>
-                            <!-- Daily Data Section -->
-                        <div class="row" >
-                            <div class="col-8" data-filter="day">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="card equipcard">
-                                            <div class="box">
-                                                <p>Hourly Uptime</p>
-                                                <canvas id="hourUptime"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card equipcard">
-                                            <div class="box">
-                                                <p>Events Occured on Hour</p>
-                                                <canvas id="hourBorrow"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card equipcard">
-                                            <div class="box">
-                                                <p>Hourly Average Duration</p>
-                                                <canvas id="hourAvgDur"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card equipcard">
-                                            <div class="box">
-                                                <p>Hourly Occupancy</p>
-                                                <canvas id="hourOccu"></canvas>
-                                            </div>
-                                        </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Displays the total duration of events recorded for the week.">Weekly Total Duration</h5>
+                                        <canvas id="weekTotalDur"></canvas>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4" data-filter="day">
-                                <div class="statbox">
-                                    <h4>Daily Graph Summary</h4>
-                                    <p><span id="hourly-int"></span></p>
-                                    
-                                    <!-- Additional statistics for day here -->
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Shows minimum, maximum, and average durations recorded weekly.">Weekly Duration</h5>
+                                        <canvas id="weekMinMaxDur"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Indicates the utilization of resources over the week.">Weekly Utilization</h5>
+                                        <canvas id="weekUtil"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                
                         
+                        <!-- Daily Data Section -->
                         
-                    </div>
+                        <div class="col-md-4 col-lg-4" data-filter="day">
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Shows uptime duration for each hour of the day.">Hourly Uptime</h5>
+                                        <canvas id="hourUptime"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Displays events that occurred during each hour.">Events Occurred on Hour</h5>
+                                        <canvas id="hourBorrow"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Shows average duration of events during each hour.">Hourly Average Duration</h5>
+                                        <canvas id="hourAvgDur"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card equipcard">
+                                    <div class="box">
+                                        <h5 data-toggle="tooltip" title="Indicates occupancy levels during each hour.">Hourly Occupancy</h5>
+                                        <canvas id="hourOccu"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                        
 
                     <div class="container mt-5">
                         <div class="row">
@@ -556,6 +505,7 @@
             </div>
         </div>
   </div>
+  
   <script src="{{ url_for('static', filename='js/d3.v5.min.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
