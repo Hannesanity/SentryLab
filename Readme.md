@@ -1,3 +1,7 @@
+### SentryLabs
+## A Predictive Maintenance and Descriptive Analysis for Laboratory Equipments
+Made for a research project that is currently continued for university purposes. 
+
 ## Prerequisites
 Make sure the following are installed on your machine:
 Windows OS
