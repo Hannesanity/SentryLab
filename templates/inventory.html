@@ -7,8 +7,8 @@
 <body>
     {% block content %}
     <!-- Sidebar -->
-    <div class="container-fluid pl-0 pr-0">
-        <div class="row no-gutters">
+    <div class="container-fluid">
+        <div class="row">
             <!-- Sidebar -->
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -22,13 +22,14 @@
              <!-- Main Content -->
             <div id="main" class="col-12">
                 <div class="header">
+                    <!-- Title on the left side -->
                     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>                    
+                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>
+                    <!-- Placeholder icons on the right side -->
                     <div class="header-icons">
                       
                     </div>
                 </div>
-                <!-- Navbar -->
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="navbar-brand" href="#">Inventory Dashboard</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,14 +53,11 @@
                 <div class="col-12">
                     <div class="infobox">
                         <div class="box">
-                            <input type="file" id="fileInput" class="form-control-file" multiple onchange="document.getElementById('uploadBtn').click()">
-                            <button class="btn btn-primary mt-3" id="uploadBtn" hidden>Upload</button>
-                            <div class="row">
-                                <button class="btn addBtn mt-3" id="addBtn">Add Data</button>
-                                <button class="btn addRoomBtn mt-3" id="addRoomBtn">Add Room List</button>
-                                <button class="btn exportBtn mt-3" id="exportBtn">Export</button>
-                            </div>
-                            <!-- Inventory Data Table -->
+                            <input type="file" id="fileInput" class="form-control-file" multiple>
+                            <button class="btn btn-primary mt-3" id="uploadBtn">Upload</button>
+                            <button class="btn btn-primary mt-3" id="addBtn">Add Data</button>
+                            <button class="btn btn-primary mt-3" id="addRoomBtn">Add Room List</button>
+                            <button class="btn btn-primary mt-3" id="exportBtn">Export</button>
                             <div class="row" data-filter="inventory" style="display: none;">
                                 <h2>Inventory Data</h2>
                                 <table class="table table-striped mt-3" id="inventory-table">
@@ -77,7 +75,7 @@
                                     <tbody></tbody>
                                 </table>
                             </div>
-                            <!-- Borrower's Slip Data Table -->
+                    
                             <div class="row" data-filter="borrower">
                                 <h2>Borrower's Slip Data</h2>
                                 <table class="table table-striped mt-3" id="borrower-table">
@@ -95,7 +93,7 @@
                                     <tbody></tbody>
                                 </table>
                             </div>
-                            <!-- Calibration Data Table -->
+                    
                             <div class="row" data-filter="calibration" style="display: none;">
                                 <h2>Calibration Data</h2>
                                 <table class="table table-striped mt-3" id="calibration-table">

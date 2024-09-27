@@ -702,4 +702,4 @@ def generate_unique_id(data):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

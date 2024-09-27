@@ -1,405 +1,405 @@
 @font-face {
-  font-family: "Oswald";
-  font-style: normal;
-  font-weight: 400;
-  src: url("Oswald-Regular.ttf") format("truetype");
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    src: url('Oswald-Regular.ttf') format('truetype'); /* Replace 'path/to/Oswald-Regular.ttf' with the actual path to your font file */
 }
 
 body {
-  background-color: #f8f8f8;
-  color: #fff;
-  font-family: Oswald, Arial;
-  width: 100%;
-  height: 100%;
-}
-.sidebar {
-  background-color: #416294;
+    background-color: #f8f8f8;
+    color: #fff; 
+    font-family: Oswald, Arial;
+    width: 100%;
+    height: 100%;
+    
+  }
+.sidebar{
+    background-color: #416294;
 }
 .sidebar .nav-link {
-  color: #bcccdc;
+    color: #bcccdc; 
 }
 .sidebar .nav-link.active {
-  color: #829ab1;
+    color: #829ab1;
 }
 
-label {
-  color: black;
+label
+{
+    color: black;
 }
+
 
 /* Base styles for sidenav */
 .sidenav {
-  width: 0px;
-  transition: 0.5s;
-  /* other styles */
+    width: 0px;
+    transition: 0.5s;
+    /* other styles */
 }
 
 /* Styles for main content when sidenav is open */
 .main-content-expanded {
-  margin-left: 250px;
-  /* other styles */
+    margin-left: 250px;
+    /* other styles */
 }
 
 .sidenav-open-button {
-  display: none; /* Hide open button when sidenav is open */
+    display: none; /* Hide open button when sidenav is open */
 }
 
 @media screen and (max-width: 768px) {
-  .sidenav-open-button {
-    display: block; /* Show open button on smaller screens */
-  }
+    .sidenav-open-button {
+        display: block; /* Show open button on smaller screens */
+    }
 }
 
 /* Media query for smaller screens */
 @media screen and (max-width: 768px) {
-  .sidenav {
-    width: 100px; /* Smaller width for sidenav */
-  }
+    .sidenav {
+        width: 100px; /* Smaller width for sidenav */
+    }
 
-  .main-content-expanded {
-    margin-left: 100px; /* Adjust main content margin */
-  }
+    .main-content-expanded {
+        margin-left: 100px; /* Adjust main content margin */
+    }
 }
 
 .overlay-content {
-  display: none; /* Initially hidden */
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  z-index: 1; /* Ensure it's above other content */
+    display: none; /* Initially hidden */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5); /* Semi-transparent background */
+    z-index: 1; /* Ensure it's above other content */
 }
 
 /* Show overlay when sidebar is open */
 .sidenav-open .overlay-content {
-  display: block;
+    display: block;
 }
 
 /* Header */
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #416294;
-  margin-bottom: 16px; /* Light gray background color, you can change it */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #416294;
+    margin-bottom: 16px; /* Light gray background color, you can change it */
 }
 
 .header-title {
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff; /* Black color for title, you can change it */
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa; /* Light gray background color, same as header */
+    padding: 10px 20px;
+}
+
+.header-icon {
+    margin-left: 10px;
+    font-size: 20px;
+    color: #555; /* Dark gray color for icons, you can change it */
+    cursor: pointer;
 }
 
 .header-icon:hover {
-  color: #000;
+    color: #000; /* Hover color for icons, you can change it */
 }
 
 /* box section */
-.box,
-.infobox,
-.statbox,
-.listbox {
-  border-radius: 16px;
-  overflow: auto;
-  padding: 32px;
-  margin: 24px 16px 16px 16px;
+.box, .infobox, .statbox, .listbox{
+    border-radius: 16px;
+    overflow: auto;    
+    padding: 32px;
+    margin: 24px 16px 16px 16px;
 }
 
-.box,
-.infobox,
-.statbox {
-  background-color: #303861;
+.box, .infobox, .statbox
+{
+    background-color: #303861;
 }
 
-.listbox {
-  background-color: #416294;
+.listbox
+{
+    background-color: #416294;
 }
+
+
 
 .card {
-  transition: 0.3s;
-  border-radius: 16px;
-  background-color: #303861;
-  margin-top: 24px;
-  margin-left: 16px;
-  margin-right: 16px;
-}
+    transition: 0.3s;
+    border-radius: 16px;
+    background-color: #303861;
+    margin-top: 24px;
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
 
 .row {
-  display: flex;
+    display: flex;
 }
+
+
+
 
 .icon-b {
-  width: 100%;
-  height: 100%;
-  font-size: 2.2em;
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 2.2em;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .col-7 {
-  -ms-flex: 0 0 58.333333%;
-  flex: 0 0 58.333333%;
-  max-width: 58.333333%;
+    -ms-flex: 0 0 58.333333%;
+    flex: 0 0 58.333333%;
+    max-width: 58.333333%;
 }
 
+
 .col-sm-6 {
-  -ms-flex: 0 0 50%;
-  flex: 0 0 50%;
-  max-width: 50%;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
 }
 
 .col-md-3 {
-  flex: 0 0 25%;
-  max-width: 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
 }
 
 table {
-  width: 100%;
-  margin-bottom: 1rem;
-  background-color: transparent;
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
 }
 
 /* stats style*/
 .col-stats {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  font-size: 14;
-  height: 100%; /* This ensures that the space is distributed over the entire height of the container */
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    font-size: 14;
+    height: 100%; /* This ensures that the space is distributed over the entire height of the container */
 }
 
 /* inventory style */
 
-.invbox {
-  padding: 24px;
+.invbox{
+    padding: 24px;
+
 }
 
 .invtable {
-  width: inherit;
-  border-collapse: collapse;
-  color: #fff;
+    width: inherit;
+    border-collapse: collapse;
+    color: #fff;
 }
 
 .table-hover tbody tr:hover {
-  background-color: #1e74b4;
+    background-color: #1e74b4;
 }
 
 /* Buttons */
-.button {
-  background-color: #1572e8;
-  color: #fff;
-}
+.button{
+    background-color: #1572e8;
+    color: #fff;
+} 
 
-.btn {
-  color: #fff;
-  margin-right: 16px;
-}
-
-.btn.addBtn {
-  background-color: #4876bb;
-}
-
-.btn.addRoomBtn {
-  background-color: #46acad;
-}
-
-.btn.exportBtn {
-  background-color: #7e2e8e;
-}
-
-.combobox {
-  margin: 24px;
+.combobox{
+    margin: 24px;
 }
 
 /* combobox */
 .form-select {
-  border: 4px solid transparent; /* Border color */
-  color: #fff;
-  background-color: #416294; /* Background color */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
-  border-radius: 16px;
+    border: 4px solid transparent; /* Border color */
+    color: #fff;
+    background-color: #416294; /* Background color */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    border-radius: 16px;
 }
 .form-select option {
-  background-color: #416294; /* Default background color */
-  color: #fff;
+    background-color: #416294; /* Default background color */
+    color: #fff;
 }
 /* Hover effect */
 .form-select:hover {
-  background-color: #1e74b4; /* Changes the background color on hover */
-  border-image: linear-gradient(to bottom, #253343, rgba(37, 51, 67, 0)) 1; /* Applies a gradient border */
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  border-radius: 16px;
+    background-color: #1e74b4; /* Changes the background color on hover */
+    border-image: linear-gradient(to bottom, #253343, rgba(37, 51, 67, 0)) 1; /* Applies a gradient border */
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    border-radius: 16px;
 }
 
 /* Canvas */
 canvas {
-  width: 100%;
-  height: auto;
+    width: 100% !important;
+    height: auto !important;
 }
 
+
 .canvas-container {
-  transition: opacity 0.5s ease-in-out;
-  opacity: 0; /* Start with canvases hidden */
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0; /* Start with canvases hidden */
 }
 
 .canvas-container.show {
-  opacity: 1; /* Full opacity when shown */
+    opacity: 1; /* Full opacity when shown */
 }
+
 
 /* Room styles */
 #filterActive {
-  border-color: #283646; /* Green border for the 'Active' button */
-  background-color: #416294;
-  color: #fff;
+    border-color: #283646; /* Green border for the 'Active' button */
+    background-color: #416294;
+    color: #fff;
 }
 
+
 #filterActive:hover {
-  background-color: #283646;
-  color: #fff;
+    background-color: #283646;
+    color: #fff;
 }
 
 #filterInactive {
-  border-color: #283646; /* Red border for the 'Inactive' button */
-  background-color: #416294;
-  color: #fff;
+    border-color: #283646; /* Red border for the 'Inactive' button */
+    background-color: #416294;
+    color: #fff;
 }
 
 #filterInactive:hover {
-  background-color: #283646;
-  color: #fff;
+    background-color: #283646;
+    color: #fff;
 }
 
-.navbar {
-  background-color: #6a94c5;
-  top: -1rem;
+.navbar{
+    background-color: #6a94c5;
 }
-
-.navbar,
-.navbar a,
-.navbar-toggler-icon,
-.navbar-light .navbar-brand,
-.navbar-light .navbar-nav .nav-link,
-.navbar-light .navbar-nav .nav-link.active,
-.navbar-light .navbar-nav .nav-item.active .nav-link {
-  color: white;
-}
-
 .navbar-nav .nav-item {
-  margin-left: 16px;
-  margin-right: 16px;
+    margin-left: 10px; /* Adjust the value as needed */
+    margin-right: 10px; /* Adjust the value as needed */
 }
 
 .navbar-nav .nav-link.active {
-  border-bottom: 3px solid #007bff;
+    border-bottom: 3px solid #007bff; /* Blue border for the active item */
 }
 
-.custom-sidenav-opt.active {
-  background-color: #6a94c5;
+.custom-sidenav-opt.active{
+    background-color: #6A94C5;
 }
 
-.form {
-  padding-top: 16px;
+.form{
+    padding-top: 16px;
 }
 
 .list-group-item {
-  background-color: transparent;
-  color: white;
-  border-right: none;
-  border-left: none;
-  border-width: 2px;
+    background-color: transparent; /* Makes the background transparent */
+    color: white; /* Sets the font color to white */
+    border-right: none; /* Removes right border */
+    border-left: none; /* Removes left border */
+    border-width: 2px;
 }
-
+/* Remove top border for the first item */
 .list-group-item:first-child {
-  border-top: none;
+    border-top: none;
 }
 
+/* Remove bottom border for the last item */
 .list-group-item:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 tr.highlight {
-  background-color: #1572e8;
+    background-color: #1572e8; /* Or any other color you prefer */
 }
 
 .stats-table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
+    
+    font-family: sans-serif;
+    background: rgba(0,0,0,0);
+    min-width: 320px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .stats-table thead tr {
+    color: #ffffff;
+    text-align: left;
+  }
+  .stats-table th,
+  .stats-table td {
+    padding: 16px 16px;
+  }
 
-  font-family: sans-serif;
-  background: rgba(0, 0, 0, 0);
-  min-width: 320px;
-  padding-left: 16px;
-  padding-right: 16px;
-}
-.stats-table thead tr {
-  color: #ffffff;
-  text-align: left;
-}
-.stats-table th,
-.stats-table td {
-  padding: 16px 16px;
-}
-
+  
 .progress-container {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: #007bff;
-  padding: 10px;
-  display: none;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #007bff;
+    padding: 10px;
+    display: none;
+  }
+  
+  .progress-bar {
+    height: 40px; /* 2x thicker */
+    position: relative;
+  }
+  
+  .progress-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .progress-text {
+    float: left;
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+
+  /* Icon Size */
+.icon-h4, .icon-h5{
+    width: 32px;
+    height: 32px;
+    margin-right: 16px;
 }
 
-.progress-bar {
-  height: 40px;
-  position: relative;
-}
-
-.progress-label {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.progress-text {
-  float: left;
-  margin-top: 10px;
-  margin-left: 10px;
-}
-
-/* Icon Size */
-.icon-h4,
-.icon-h5 {
-  width: 32px;
-  height: 32px;
-  margin-right: 16px;
-}
-
+/* Bold Text */
 .bold-text {
-  font-weight: bold;
+    font-weight: bold;
 }
+
 
 /* Calendar */
 
 .maintenance-event {
-  background-color: #416294;
-  border-color: #416294;
-  color: white;
+    background-color: #416294 !important; /* Maintenance color */
+    border-color: #416294 !important; /* Optional: Match border color */
+    color: white !important; /* Text color */
 }
 
+/* Style for depreciation events */
 .depreciation-event {
-  background-color: red;
-  border-color: red;
-  color: white;
+    background-color: red !important; /* Depreciation color */
+    border-color: red !important; /* Optional: Match border color */
+    color: white !important; /* Text color */
 }
 
 .fc-list-event .fc-event-time {
-  color: inherit;
+    color: inherit; /* Inherit the color from the event class */
 }
+
+

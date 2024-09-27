@@ -7,7 +7,7 @@
 <body>
     {% block content %}
     
-    <div class="container-fluid pl-0 pr-0">
+    <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
             <div id="mySidenav" class="sidenav">
@@ -18,19 +18,19 @@
                 <a href="#" id="updateButton" class="custom-sidenav-opt"><img src="{{ url_for('static', filename='img/update.png') }}" alt="Update Stats" class="icon-h4"> Update Stats</a>
                 <a href="#" id="trainButton" class="custom-sidenav-opt"><img src="{{ url_for('static', filename='img/train.png') }}" alt="Train" class="icon-h4"> Train</a>
             </div>
-            
              <!-- Main Content -->
             <div id="main" class="col-12">
                 <div class="header">
+                    <!-- Title on the left side -->
                     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>                    
+                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>
+                    <!-- Placeholder icons on the right side -->
                     <div class="header-icons">
                       
                     </div>
-                </div>                
+                </div>
 
                 <div class="col-12">
-                    <!-- Combobox for filters -->
                     <div class="combobox" style="display: flex; justify-content: space-between;">
                         <div>
                             <label for="equipment-select">Equipment Name:</label>
@@ -55,8 +55,8 @@
                         </div>
                     </div>
 
-                    <!-- Equipment information -->
-                    <div class="row row-card-no-pd">                    
+                    <div class="row row-card-no-pd">
+                        <!-- first row equipment stats-->
                         <div class="col-sm-6 col-md-3 single-card">
                             <div class="row">
                                 <div class="col-5">
@@ -118,10 +118,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">                        
+                    <div class="row">
+                        <!-- Cards -->
                         <div class="col-md-4 col-lg-4">
-                            <!-- Usage frequency box -->
                             <div class="infobox">
                                 <table class="stats-table">
                                     <thead>
@@ -165,7 +164,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- Temporal Patterns box -->
+                            
                             <div class="infobox">
                                 <table class="stats-table">
                                     <thead>
@@ -209,7 +208,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- Statistical Computations box -->
+                        
                             <div class="infobox">
                                 <table class="stats-table">
                                     <thead>
@@ -221,7 +220,8 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>                                        
+                                    <tbody>
+                                        
                                         <tr>
                                             <td class="bold-text" data-toggle="tooltip" title="Data points that deviate significantly from other observations.">Outliers:</td>
                                             <td id="outliers"></td>
@@ -239,7 +239,7 @@
                             </div>
                         </div>
                         
-                        <!-- Health predictions box -->
+                    
                         <div class="col-md-4 col-lg-4">
                             <div class="infobox">
                                 <h4 class="bold-text">
@@ -295,15 +295,13 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>      
-
-                            <!-- Schedules for prediction box -->
+                            </div>
+                            
                             <div class="statbox">
                                 <h4 class="bold-text"><img src="{{ url_for('static', filename='img/calendar.png') }}" class="icon-h4">Schedules</h4>
                                 <div id="schedulercal"></div>
                             </div>
 
-                            <!-- Maintenance information box -->
                             <div class="infobox">
                                 <table class="stats-table">
                                     <thead>
@@ -340,9 +338,7 @@
                                 </table>
                             </div>
                         </div>
-                        
-                        <!-- Charts -->
-                        <!-- Overall Charts -->
+
                         <div class="col-md-4 col-lg-4" data-filter="overall">
                             <div class="col-12">
                                 <div class="card equipcard">
@@ -377,8 +373,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Monthly Charts -->
+                        
                         <div class="col-md-4 col-lg-4" data-filter="month">
                             <div class="col-12">
                                 <div class="card equipcard">
@@ -414,7 +409,8 @@
                             </div>
                         </div>
                         
-                        <!-- Weekly Charts -->
+                        <!-- Weekly Data Section -->
+                        
                         <div class="col-md-4 col-lg-4" data-filter="week">
                             <div class="col-12">
                                 <div class="card equipcard">
@@ -450,7 +446,8 @@
                             </div>
                         </div>
                         
-                        <!-- Daily Charts -->                        
+                        <!-- Daily Data Section -->
+                        
                         <div class="col-md-4 col-lg-4" data-filter="day">
                             <div class="col-12">
                                 <div class="card equipcard">
@@ -487,7 +484,6 @@
                         </div>
                     </div>                        
 
-                    <!-- Progress Bar -->
                     <div class="container mt-5">
                         <div class="row">
                           <div class="col">
