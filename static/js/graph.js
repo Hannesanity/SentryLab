@@ -1,6 +1,5 @@
 var data;
 var graphData;
-// Initialize an object to hold all the fetched data
 let allGraphData = {
     monthly: null,
     weekly: null,
@@ -13,7 +12,6 @@ Chart.defaults.global.defaultFontSize = 12;
 Chart.defaults.global.defaultFontFamily = 'Arial, sans-serif';
 
 
-  // Mapping of filter values to canvas IDs
   var filterToCanvasMap = {
     'filter1': ['yearTotalDur', 'yearFreq', 'yearUtil', 'yearMinMaxDur'],
     'filter2': ['monthTotalDur', 'monthUtil', 'monthMinMaxDur', 'monthFreq'],
@@ -21,22 +19,17 @@ Chart.defaults.global.defaultFontFamily = 'Arial, sans-serif';
     'filter4': ['hourUptime', 'hourBorrow', 'hourAvgDur', 'hourOccu']
 };
 
+// Update the canvas visibility based on the selected filter
 function updateCanvasVisibility(selectedFilter) {
-    console.log('Selected Filter:', selectedFilter); // Debugging line
-
-    // Hide all elements with data-filter attribute first
     document.querySelectorAll('[data-filter]').forEach(function(element) {
         element.style.display = 'none';
     });
 
-    // Check if the selected filter is 'overall'
     if (selectedFilter === 'overall') {
-        // Show only the elements related to the 'overall' statistics
         document.querySelectorAll('[data-filter="overall"]').forEach(function(element) {
             element.style.display = 'block';
         });
     } else {
-        // Show the elements related to the selected filter other than 'overall'
         document.querySelectorAll(`[data-filter="${selectedFilter}"]`).forEach(function(element) {
             element.style.display = 'block';
         });
@@ -49,7 +42,7 @@ document.getElementById('graph-filter-select').addEventListener('change', functi
     updateCanvasVisibility(selectedFilter);
 });
 
-// Initial call to set the default state
+// Functions when the page loads
 document.addEventListener('DOMContentLoaded', function() {
     updateCanvasVisibility(document.getElementById('graph-filter-select').value);
 });
@@ -80,7 +73,6 @@ var dayNames = {
 };
 
 
-
 // Fetch Monthly Data
 fetch('static/monthly.json')
     .then(response => response.json())
@@ -108,6 +100,7 @@ fetch('static/hourly.json')
     })
     .catch(error => console.error('Error fetching hourly data:', error));
 
+// Fetch Yearly Data
 fetch('static/yearly.json')
     .then(response => response.json())
     .then(data => {
@@ -116,6 +109,7 @@ fetch('static/yearly.json')
     })
     .catch(error => console.error('Error fetching year data:', error));
 
+// Fetch Overall Data
 fetch('static/overall.json')
     .then(response => response.json())
     .then(data => {
@@ -124,7 +118,7 @@ fetch('static/overall.json')
     })
     .catch(error => console.error('Error fetching year data:', error));
 
-// Get the context of the canvas element we want to select
+// Canvas
 var ctx2 = document.getElementById('monthTotalDur').getContext('2d');
 var ctx3 = document.getElementById('monthUtil').getContext('2d');
 var ctx4 = document.getElementById('monthMinMaxDur').getContext('2d');
@@ -143,19 +137,17 @@ var ctx16 = document.getElementById('yearFreq').getContext('2d');
 var ctx17 = document.getElementById('yearUtil').getContext('2d');
 
 
-// Create the chart
-
-
-// Create the second chart
+// Chart functions
+// For monthly charts
 var monthTotalDurationChart = new Chart(ctx2, {
     type: 'bar',
     data: {
-        labels: [],  // Initialize with empty labels
+        labels: [], 
         datasets: [{
             label: 'Total Duration of Equipment Usage Per Month',
-            data: [],  // Initialize with empty data
-            backgroundColor: '#5A81B2', // Updated color
-            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
+            data: [], 
+            backgroundColor: '#5A81B2', 
+            borderColor: 'rgba(90, 129, 178, 1)', 
             borderWidth: 1
         }]
     },
@@ -179,16 +171,16 @@ var monthTotalDurationChart = new Chart(ctx2, {
     }
 });
 
-// Create other charts
+
 var monthUtilChart = new Chart(ctx3, {
     type: 'line',
     data: {
-        labels: [],  // Initialize with empty labels
+        labels: [],  
         datasets: [{
             label: 'Monthly Utilization Rate',
-            data: [],  // Initialize with empty data
-            backgroundColor: '#5A81B2', // Updated color
-            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
+            data: [],  
+            backgroundColor: '#5A81B2', 
+            borderColor: 'rgba(90, 129, 178, 1)',
             borderWidth: 1,
             fill: true
         }]
@@ -216,29 +208,29 @@ var monthUtilChart = new Chart(ctx3, {
 var monthMinMaxDurChart = new Chart(ctx4, {
     type: 'line',
     data: {
-        labels: [], // This will be your x-axis labels, e.g., hours of the day
+        labels: [],
         datasets: [
             {
                 label: 'Min Duration',
-                data: [], // This will be your data for min duration
-                borderColor: 'rgba(255, 99, 132, 1)', // Color for min duration line
+                data: [], 
+                borderColor: 'rgba(255, 99, 132, 1)', 
                 borderWidth: 1,
                 borderDash: [5, 5]
             },
             {
                 label: 'Average Duration',
-                data: [], // This will be your data for average duration
-                borderColor: 'rgba(255, 255, 224, 1)', // Color for average duration line
+                data: [], 
+                borderColor: 'rgba(255, 255, 224, 1)', 
                 borderWidth: 1,
                 borderDash: [5, 5]
             },
             {
                 label: 'Max Duration',
-                data: [], // This will be your data for max duration
-                borderColor: 'rgba(54, 162, 235, 1)', // Color for max duration line
+                data: [], 
+                borderColor: 'rgba(54, 162, 235, 1)', 
                 borderWidth: 1
             }
-            // Add more datasets here if needed
+
         ]
     },
     options: {
@@ -264,12 +256,12 @@ var monthMinMaxDurChart = new Chart(ctx4, {
 var monthFreqChart = new Chart(ctx5, {
     type: 'bar',
     data: {
-        labels: [],  // Initialize with empty labels
+        labels: [],  
         datasets: [{
             label: 'Frequency per Month',
-            data: [],  // Initialize with empty data
-            backgroundColor: '#5A81B2', // Updated color
-            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
+            data: [],  
+            backgroundColor: '#5A81B2', 
+            borderColor: 'rgba(90, 129, 178, 1)', 
             borderWidth: 1
         }]
     },
@@ -293,17 +285,16 @@ var monthFreqChart = new Chart(ctx5, {
     }
 });
 
-
-// Create the second chart
+// For weekly charts
 var weekTotalDurationChart = new Chart(ctx6, {
     type: 'bar',
     data: {
-        labels: [],  // Initialize with empty labels
+        labels: [],  
         datasets: [{
             label: 'Total Duration of Equipment Usage Per week',
-            data: [],  // Initialize with empty data
-            backgroundColor: '#5A81B2', // Updated color
-            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
+            data: [],  
+            backgroundColor: '#5A81B2', 
+            borderColor: 'rgba(90, 129, 178, 1)', 
             borderWidth: 1
         }]
     },
@@ -331,29 +322,28 @@ var weekTotalDurationChart = new Chart(ctx6, {
 var weekMinMaxDurChart = new Chart(ctx7, {
     type: 'line',
     data: {
-        labels: [], // This will be your x-axis labels, e.g., hours of the day
+        labels: [],
         datasets: [
             {
                 label: 'Min Duration',
-                data: [], // This will be your data for min duration
-                borderColor: 'rgba(255, 99, 132, 1)', // Color for min duration line
+                data: [], 
+                borderColor: 'rgba(255, 99, 132, 1)', 
                 borderWidth: 1,
                 borderDash: [5, 5]
             },
             {
                 label: 'Average Duration',
-                data: [], // This will be your data for average duration
-                borderColor: 'rgba(255, 255, 224, 1)', // Color for average duration line
+                data: [], 
+                borderColor: 'rgba(255, 255, 224, 1)', 
                 borderWidth: 1,
                 borderDash: [5, 5]
             },
             {
                 label: 'Max Duration',
-                data: [], // This will be your data for max duration
-                borderColor: 'rgba(54, 162, 235, 1)', // Color for max duration line
+                data: [], 
+                borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }
-            // Add more datasets here if needed
         ]
     },
     options: {
@@ -380,12 +370,12 @@ var weekMinMaxDurChart = new Chart(ctx7, {
 var weekFreqChart = new Chart(ctx8, {
     type: 'bar',
     data: {
-        labels: [],  // Initialize with empty labels
+        labels: [],  
         datasets: [{
             label: 'Frequency per week',
-            data: [],  // Initialize with empty data
-            backgroundColor: '#5A81B2', // Updated color
-            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
+            data: [],  
+            backgroundColor: '#5A81B2', 
+            borderColor: 'rgba(90, 129, 178, 1)', 
             borderWidth: 1
         }]
     },
@@ -433,6 +423,7 @@ var weekUtilChart = new Chart(ctx9, {
     }
 });
 
+// For daily charts
 var hourUptimeChart = new Chart(ctx10, {
     type: 'bar',
     data: {
@@ -440,14 +431,14 @@ var hourUptimeChart = new Chart(ctx10, {
         datasets: [{
             label: 'Uptime',
             data: [],
-            backgroundColor: 'rgba(54, 162, 235, 0.5)', // Semi-transparent blue
+            backgroundColor: 'rgba(54, 162, 235, 0.5)', 
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1,
-            fill: false // Fill the area under the line
+            fill: false 
         }, {
             label: 'Idle Time',
-            data: [], // Assuming idle time is the inverse of uptime flag
-            backgroundColor: 'rgba(255, 99, 132, 0.5)', // Semi-transparent red
+            data: [], 
+            backgroundColor: 'rgba(255, 99, 132, 0.5)', 
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
             fill: false
@@ -471,25 +462,25 @@ var hourBorrowChart = new Chart(ctx11, {
         datasets: [{
             label: 'Borrowed',
             data: [],
-            backgroundColor: 'rgba(54, 162, 235, 0.5)', // Semi-transparent blue
+            backgroundColor: 'rgba(54, 162, 235, 0.5)', 
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1,
-            fill: true, // Fill the area under the line
+            fill: true, 
             borderDash: [5,5]
         }, {
             label: 'Returned',
             data: [] ,
-            backgroundColor: 'rgba(255, 99, 132, 0.5)', // Semi-transparent red
+            backgroundColor: 'rgba(255, 99, 132, 0.5)', 
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
-            fill: true // Fill the area under the line
+            fill: true 
         }]
     },
     options: {
         responsive: true,
         scales: {
             y: {
-                stacked: true // Stack the areas on the y-axis
+                stacked: true 
             }
         }
     }
@@ -499,12 +490,12 @@ var hourBorrowChart = new Chart(ctx11, {
 var hourAvgDurChart = new Chart(ctx12, {
     type: 'line',
     data: {
-        labels: [],  // Initialize with empty labels
+        labels: [],  
         datasets: [{
             label: 'Average Duration',
-            data: [],  // Initialize with empty data
-            backgroundColor: '#5A81B2', // Updated color
-            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
+            data: [], 
+            backgroundColor: '#5A81B2',
+            borderColor: 'rgba(90, 129, 178, 1)', 
             borderWidth: 1
         }]
     },
@@ -531,12 +522,12 @@ var hourAvgDurChart = new Chart(ctx12, {
 var hourOccuChart = new Chart(ctx13, {
     type: 'bar',
     data: {
-        labels: [],  // Initialize with empty labels
+        labels: [], 
         datasets: [{
             label: 'Times that the equipment is occupied',
-            data: [],  // Initialize with empty data
-            backgroundColor: '#5A81B2', // Updated color
-            borderColor: 'rgba(90, 129, 178, 1)', // Updated color
+            data: [],  
+            backgroundColor: '#5A81B2',
+            borderColor: 'rgba(90, 129, 178, 1)', 
             borderWidth: 1
         }]
     },
@@ -560,33 +551,33 @@ var hourOccuChart = new Chart(ctx13, {
     }
     });
 
-
+// For overall charts
 var yearMinMaxDurChart = new Chart(ctx14, {
     type: 'line',
     data: {
-        labels: [], // This will be your x-axis labels, e.g., hours of the day
+        labels: [], 
         datasets: [
             {
                 label: 'Min Duration',
-                data: [], // This will be your data for min duration
-                borderColor: 'rgba(255, 99, 132, 1)', // Color for min duration line
+                data: [], 
+                borderColor: 'rgba(255, 99, 132, 1)', 
                 borderWidth: 1,
                 borderDash: [5,5]
             },
             {
                 label: 'Average Duration',
-                data: [], // This will be your data for min duration
-                borderColor: 'rgba(255, 255, 224, 1)', // Color for min duration line
+                data: [], 
+                borderColor: 'rgba(255, 255, 224, 1)', 
                 borderWidth: 1,
                 borderDash: [5,5]
             },
             {
                 label: 'Max Duration',
-                data: [], // This will be your data for max duration
-                borderColor: 'rgba(54, 162, 235, 1)', // Color for max duration line
+                data: [], 
+                borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }
-            // Add more datasets here if needed
+
         ]
     },
     options: {
@@ -678,9 +669,7 @@ var yearUtilChart = new Chart(ctx17, {
 });
 
 function createHealthBar(canvasId, healthPercentage) {
-    console.log('Canvas ID:', canvasId); // Check the ID being queried
     const canvas = document.getElementById(canvasId);
-    console.log('Canvas Element:', canvas);
     const ctx = canvas.getContext('2d');
 
     const data = {
@@ -708,10 +697,10 @@ function createHealthBar(canvasId, healthPercentage) {
                 const width = ctx.canvas.width;
                 const height = ctx.canvas.height;
                 ctx.restore();
-                ctx.font = 'bold 16px Arial'; // Adjust the font size and type as needed
+                ctx.font = 'bold 16px Arial'; 
                 ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#333'; // Font color
-                const text = healthPercentage.toFixed(1) + '%'; // Text to display
+                ctx.fillStyle = '#333'; 
+                const text = healthPercentage.toFixed(1) + '%'; 
                 const textX = Math.round((width - ctx.measureText(text).width) / 2);
                 const textY = height / 2;
                 ctx.fillText(text, textX, textY);
@@ -727,9 +716,7 @@ function createHealthBar(canvasId, healthPercentage) {
     });
 }
 
-
-
-
+// Formatting time purposes
 function formatAsTime(hours) {
     const hh = Math.floor(hours);
     const mm = Math.round((hours - hh) * 60);
@@ -743,13 +730,13 @@ function formatAsTime(hours) {
         return `${hh} hour${hh !== 1 ? 's' : ''} ${mm} minute${mm !== 1 ? 's' : ''}`;
     }
 }
-// This function is called when #unique-id-select changes
+
+// Updating selected equipment
 function updateSelectedEquipmentData(selectedUniqueId) {
-    // Fetch data from the JSON file
     fetch('/static/items.json')
     .then(response => response.json())
     .then(itemsData => {
-        // Find the item with the selected unique ID
+        // Finding items based on selected UniqueID
         var selectedItemData = itemsData.find(item => item.UniqueID === selectedUniqueId);
         if (selectedItemData) {
             document.getElementById('equipment-name').textContent = selectedItemData['Name'];
@@ -763,7 +750,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
     })
     .catch(error => console.error('Error:', error));
 
-    // Filter the data for the selected unique ID   
+    
     var filteredMonthlyData = allGraphData.monthly.filter(item => item.UniqueID === selectedUniqueId);
     var filteredWeeklyData = allGraphData.weekly.filter(item => item.UniqueID === selectedUniqueId);
     var filteredHourlyData = allGraphData.hourly.filter(item => item.UniqueID === selectedUniqueId);
@@ -815,7 +802,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
                 title: selectedData['Equipment Name'] + ' ' + selectedData['MAINTENANCE TYPE'] + ' based on MLR',
                 start: selectedData['NextMaintenanceDate_MLR'],
                 allDay: true,
-                classNames: ['maintenance-event'] // Add a class for maintenance events
+                classNames: ['maintenance-event'] 
             },
             {
                 title: selectedData['Equipment Name'] + ' ' + selectedData['MAINTENANCE TYPE'] + ' based on KNN',
@@ -833,7 +820,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
                 title: selectedData['Equipment Name'] + ' Depreciation based on MLR',
                 start: selectedData['DepreciationDate_MLR'],
                 allDay: true,
-                classNames: ['depreciation-event'] // Add a class for depreciation events
+                classNames: ['depreciation-event'] 
             },
             {
                 title: selectedData['Equipment Name'] + ' Depreciation based on KNN',
@@ -849,9 +836,6 @@ function updateSelectedEquipmentData(selectedUniqueId) {
             }
         ];
 
-        // Log events for debugging
-        console.log('Events to be added:', events);
-
         // Clear previous events
         window.calendarsched.getEventSources().forEach(eventSource => eventSource.remove());
 
@@ -861,8 +845,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
        
     }
     
-    // Update Monthly Stats Chart
-    
+    // Update Monthly Stats Chart    
     monthTotalDurationChart.data.labels = filteredMonthlyData.map(item => monthNames[item.MONTH]);
     monthTotalDurationChart.data.datasets[0].data = filteredMonthlyData.map(item => item['TotalDuration']);
     monthTotalDurationChart.update();
@@ -901,8 +884,6 @@ function updateSelectedEquipmentData(selectedUniqueId) {
     weekUtilChart.update();
 
 
-    // Update Borrowing Patterns Chart to change btw
-
     // Update Borrowing Patterns Chart
     hourUptimeChart.data.labels = filteredHourlyData.map(item => item['HOUR'] + ':00');
     hourUptimeChart.data.datasets[0].data = filteredHourlyData.map(item => item['UPTIME FLAG']);
@@ -924,7 +905,7 @@ function updateSelectedEquipmentData(selectedUniqueId) {
     hourOccuChart.data.datasets[0].data = filteredHourlyData.map(item => item['Occupancy Count']);
     hourOccuChart.update();
 
-    // Years Chart
+    // Update Years Chart
     yearMinMaxDurChart.data.labels = filteredYearData.map(item => item['YEAR']);
     yearMinMaxDurChart.data.datasets[0].data = filteredYearData.map(item => item['MIN DURATION']);
     yearMinMaxDurChart.data.datasets[1].data = filteredYearData.map(item => item['AVERAGE DURATION']);
@@ -946,19 +927,20 @@ function updateSelectedEquipmentData(selectedUniqueId) {
 
 }
 
+// Update the selected equipment data when the unique ID changes
 $('#unique-id-select').change(function() {
     var selectedUniqueId = $(this).val();
     updateSelectedEquipmentData(selectedUniqueId); // Call the function to update the data
 });
 
-// Initialize the unique ID select when the page loads
+// Functions when the page loads
 $(document).ready(function() {
-    updateUniqueIdSelect(); // Load unique IDs based on the selected equipment
-    $('#equipment-select').change(updateUniqueIdSelect); // Attach the event handler
+    updateUniqueIdSelect();
+    $('#equipment-select').change(updateUniqueIdSelect); 
 });
 
 
-// Calendar
+// Initialize the calendar along with calendar functions
 document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll('[data-toggle="tooltip"]').forEach(tooltipTriggerEl => {
@@ -968,10 +950,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('schedulercal');
 
     window.calendarsched = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'listMonth', // Change the default view to listYear to show all events
+        initialView: 'listMonth', 
         views: {
             listYear: {
-                buttonText: 'Year View' // Optionally rename the button to 'Year View'
+                buttonText: 'Year View' 
             },
             listMonth: {
                 buttonText: 'Month View'
@@ -981,9 +963,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         headerToolbar: {
-            left: 'prev,next', // Remove the "today" button
+            left: 'prev,next', 
             center: 'title',
-            right: 'dayGridMonth,listMonth,listYear' // Add buttons for different views
+            right: 'dayGridMonth,listMonth,listYear' 
         },
         events: [            
         ]
@@ -992,14 +974,11 @@ document.addEventListener('DOMContentLoaded', function() {
     calendarsched.render();
 });
 
+// Function to redirect to the schedule view
 function redirectToSchedule(date) {
-    if (window.calendarsched) {
-        // Jump to the specified date
+    if (window.calendarsched) {        
         window.calendarsched.gotoDate(date);
-
         window.calendarsched.changeView('listMonth');
-
-        console.log(`Redirected to ${date}`);
     } else {
         console.error('Calendar is not initialized.');
     }

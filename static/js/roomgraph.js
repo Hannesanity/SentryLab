@@ -6,7 +6,7 @@ let allRoomData = [];
 var calendar;
 
 
-
+// Canvas
 const octxQ1 = document.getElementById('quarter1Chart').getContext('2d');
 const octxQ2 = document.getElementById('quarter2Chart').getContext('2d');
 const octxQ3 = document.getElementById('quarter3Chart').getContext('2d');
@@ -19,7 +19,6 @@ const rctx3 = document.getElementById('roomAverageChart').getContext('2d');
 // Function to create a pie chart for a specific quarter
 function createQuarterPieChart(ctx, quarterData, quarterLabel) {
     console.log(`Creating pie chart for ${quarterLabel}:`, quarterData);
-    // Filter out 'Overall' from the labels and data
     const filteredLabels = [];
     const filteredData = [];
     
@@ -35,6 +34,7 @@ function createQuarterPieChart(ctx, quarterData, quarterLabel) {
         data: {
             labels: filteredLabels,
             datasets: [{
+                
                 label: quarterLabel,
                 data: filteredData,
                 backgroundColor: [
@@ -42,14 +42,14 @@ function createQuarterPieChart(ctx, quarterData, quarterLabel) {
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
-                    // You can add more colors if needed
+                    
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
-                    // Add more border colors if you have more rooms
+                    
                 ],
                 borderWidth: 1
             }]
@@ -63,24 +63,23 @@ function createQuarterPieChart(ctx, quarterData, quarterLabel) {
     });
 }
 
+// Fetch overall data and create pie charts based on filter
 fetch('static/overall_stats.json')
     .then(response => response.json())
     .then(overallData => {
         overallStats = overallData;
         console.log('Room statistics data:', overallStats);
 
-        // Populate the navbar dynamically based on the room names from the JSON data
         const navbarItems = document.getElementById('navbarItems');
         overallStats.forEach((room, index) => {
             console.log(`Room ${index + 1}: ${room.Room}`);
-            const isActive = room.Room === 'Overall' ? 'active' : ''; // Highlight 'Overall' as active by default
+            const isActive = room.Room === 'Overall' ? 'active' : '';
             const listItem = document.createElement('li');
             listItem.className = `nav-item ${isActive}`;
             listItem.innerHTML = `<a class="nav-link" href="#">${room.Room}</a>`;
             navbarItems.appendChild(listItem);
         });
 
-        // Event listener for updating room statistics based on room selection
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -90,37 +89,27 @@ fetch('static/overall_stats.json')
             });
         });
 
-        // Initial update for the default room (e.g., 'Overall')
         updateRoomStats(overallStats, 'Overall');
 
         setTimeout(() => {
-            // Update the Frequency Bar Chart
-        }, 5000); // 5 second delay
+           
+        }, 5000);
 
-        // Create the pie charts for each quarter after a delay
         setTimeout(() => {
             const quarter1Chart = createQuarterPieChart(octxQ1, overallStats.map(item => item['Q1 Count']), 'Q1');
             const quarter2Chart = createQuarterPieChart(octxQ2, overallStats.map(item => item['Q2 Count']), 'Q2');
             const quarter3Chart = createQuarterPieChart(octxQ3, overallStats.map(item => item['Q3 Count']), 'Q3');
             const quarter4Chart = createQuarterPieChart(octxQ4, overallStats.map(item => item['Q4 Count']), 'Q4');
-        }, 10000); // 10 second delay
+        }, 5000); 
     })
     .catch(error => console.error('Error fetching room statistics data:', error));
 
 
-
-
-
-
-
-
-// For Room Stats
-// Function to convert UNIX timestamps to a readable date format
 function convertTimestampsToDateLabels(timestamps) {
     return timestamps.map(timestamp => new Date(timestamp).toLocaleDateString('en-US'));
 }
 
-// Create the chart using the context from a canvas element with id 'roomBorrowedChart'
+// Charts
 var roomBorrowedChart = new Chart(rctx1, {
     type: 'line',
     data: {
@@ -173,52 +162,49 @@ var roomDurationChart = new Chart (rctx2, {
     }
     });
 
-    var roomAverageChart = new Chart (rctx3, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Average Duration of Equipment Usage',
-                data: [],
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Equipment'
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Average Duration in Hours'
-                    },
-                    beginAtZero: true
+var roomAverageChart = new Chart (rctx3, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Average Duration of Equipment Usage',
+            data: [],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Equipment'
                 }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Average Duration in Hours'
+                },
+                beginAtZero: true
             }
         }
-        });
+    }
+    });
     
 
+// Fetch room data and create line charts
 fetch('static/room_stats.json')
     .then(response => response.json())
     .then(roomData => {
         console.log('Room statistics data:', roomData);
-        // Sort the data by 'DateTime Borrowed'
         roomData.sort((a, b) => a['DateTimeBorrowed'] - b['DateTimeBorrowed']);
 
-        allRoomData = roomData; // Store the sorted data globally
+        allRoomData = roomData; 
 
-        // Initialize the chart with the default view, possibly 'Overall'
         updateRoomBorrowedChart('Overall', allRoomData);
               
-
-        // Update the chart with the fetched data
         roomBorrowedChart.data.labels = allRoomData.map(item => new Date(item['DateTimeBorrowed']).toLocaleDateString('en-US'));
         roomBorrowedChart.data.datasets[0].data = allRoomData.map(item => item['Frequency']);
         roomBorrowedChart.update();
@@ -234,35 +220,29 @@ fetch('static/room_stats.json')
     .catch(error => console.error('Error fetching room statistics data:', error));
 
 
+// Function for updating charts
 function updateRoomBorrowedChart(roomId, roomData) {
     console.log(`Updating charts for Room ID: ${roomId}`, roomData);
 
-    // Filter data based on the selected room
     let filteredData;
     if (roomId === 'Overall') {
-        filteredData = roomData; // Use all data if 'Overall' is selected
+        filteredData = roomData; 
         console.log('Overall selected. Displaying data for all rooms.', filteredData);
     } else {
-        // Filter data for the selected room
         filteredData = roomData.filter(item => item.Room === roomId);
         console.log(`Room ${roomId} selected. Displaying data for this room:`, filteredData);
     }
 
-    // Check if filteredData contains elements before proceeding
     if (!filteredData || filteredData.length === 0) {
         console.warn(`No data available for Room ID: ${roomId}`);
-        return; // Exit the function if no data is found for the selected room
+        return;
     }
 
-    // Extract labels and data for the charts
     const labels = filteredData.map(item => new Date(item['DateTimeBorrowed']).toLocaleDateString('en-US'));
     const frequencyData = filteredData.map(item => item['Frequency']);
     const durationData = filteredData.map(item => item['Duration Sum']);
     const averageDurationData = filteredData.map(item => item['Average Duration Per Use']);
 
-
-
-    // Ensure charts are initialized and then update them
     if (roomBorrowedChart && roomDurationChart && roomAverageChart) {
         roomBorrowedChart.data.labels = labels;
         roomBorrowedChart.data.datasets[0].data = frequencyData;
@@ -281,7 +261,7 @@ function updateRoomBorrowedChart(roomId, roomData) {
 }
 
 
-
+// Formatting time purposes
 function formatAsTime(hours) {
     const hh = Math.floor(hours);
     const mm = Math.round((hours - hh) * 60);
@@ -296,35 +276,25 @@ function formatAsTime(hours) {
     }
 }
 
+// Function for update room statistics
 function updateRoomStats(overallStats, roomId) {
-    // Fetch room details from rooms.json
     $.getJSON('/static/rooms.json', function (rooms) {
-        // Convert rooms array to a dictionary for easy lookup by RoomNumber
         const roomDetails = rooms.reduce((acc, room) => {
             acc[room.RoomNumber] = { name: room.RoomName, number: room.RoomNumber };
             return acc;
         }, {});
+        
+        roomId = roomId.replace(/([A-Z]+)(\d+)/, '$1 $2').trim();
 
-        // Filter the stats for the selected room
-        console.log("Filtering stats for room:", roomId);
         const filteredStats = overallStats.filter(stat => stat.Room === roomId);
 
-        // Get the room details from the fetched data
         const roomInfo = roomDetails[roomId] || { name: "Others", number: "N/A" };
 
-        // Your logic to handle filteredStats and roomInfo goes here
-        console.log("Room Info:", roomInfo);
-
-        // Update the room information card
         document.getElementById('room-name').textContent = roomInfo.name;
-        
         document.getElementById('room-number').textContent = roomInfo.number;
-
-        // Check if there are any statistics for the room
+    
         if (filteredStats.length > 0) {
-            // Update other cards with specific stats as needed
             filteredStats.forEach((stat, index) => {
-                // Update the content of each card
                 document.getElementById('total-equipments').textContent = stat['Equipment Count'];
                 document.getElementById('frequency').textContent = stat['Frequency'];
                 document.getElementById('total-duration').textContent = formatAsTime(stat['Total Duration']);
@@ -334,7 +304,6 @@ function updateRoomStats(overallStats, roomId) {
                 document.getElementById('min-duration').textContent = formatAsTime(stat['Min Duration']);
                 document.getElementById('standard-deviation').textContent = stat['Standard Deviation Duration'].toFixed(2);
                 document.getElementById('unique-dates').textContent = stat['Unique Dates'];
-                // Add more updates as needed
             });
         } else {
             document.getElementById('frequency').textContent = '0';
@@ -349,18 +318,19 @@ function updateRoomStats(overallStats, roomId) {
     
 }
 
+// Function for populating inventory
 function populateInventorySelect(eqStats) {
     const inventorySelect = $('#inventory-select');
-    inventorySelect.empty(); // Clear any existing options
+    inventorySelect.empty(); 
 
     eqStats.forEach(stat => {
         inventorySelect.append(new Option(stat["EquipmentName"], stat["EquipmentName"]));
     });
 
-    // Trigger change event to load the stats for the first item by default
     inventorySelect.change();
 }
 
+// Function for updating equipment stats
 function updateEquipmentStats() {
     const selInventory = $('#inventory-select').val();
     fetch('static/eqstats.json')
@@ -373,15 +343,12 @@ function updateEquipmentStats() {
     
     .then(eqStats => {
         if (!selInventory) {
-            // If no item is selected, populate the select box first
             populateInventorySelect(eqStats);
         } else {
-            // Fetch and display the stats for the selected equipment
             const equipmentStat = eqStats.find(stat => stat["EquipmentName"] === selInventory);
 
             if (equipmentStat) {
                 console.log('Equipment Stat:', equipmentStat);
-                
                 document.getElementById('eqstat-avg').textContent = formatAsTime(equipmentStat['Average Duration']);                
                 document.getElementById('eqstat-first-bor').textContent = new Date(equipmentStat['First Borrow Date']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 document.getElementById('eqstat-first-ret').textContent = new Date(equipmentStat['First Return Date']).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -403,8 +370,6 @@ function updateEquipmentStats() {
                 document.getElementById('eqstat-total').textContent = formatAsTime(equipmentStat['Total Duration'].toFixed(2));
                 document.getElementById('eqstat-unique-dates').textContent = equipmentStat['Unique Dates'];
                 fetchEquipmentSchedule(equipmentStat['EquipmentName']);
-
-                // Now you can use this data to populate your DataTable or other UI elements
             } else {
                 console.warn('No stats found for selected inventory:', selInventory);
             }
@@ -413,15 +378,15 @@ function updateEquipmentStats() {
     .catch(error => console.error('Error fetching equipment stats:', error));
 }
 
-
+// Function when the page loads
 $(document).ready(function() {
-    updateEquipmentStats(); // Load unique IDs based on the selected equipment
-    $('#inventory-select').change(updateEquipmentStats); // Attach the event handler
+    updateEquipmentStats(); 
+    $('#inventory-select').change(updateEquipmentStats);
     
 });
 
+// Function for initializing the calendar along with calendar functions
 document.addEventListener('DOMContentLoaded', function() {
-
     document.querySelectorAll('[data-toggle="tooltip"]').forEach(tooltipTriggerEl => {
         new bootstrap.Tooltip(tooltipTriggerEl);
     });
@@ -429,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
     window.calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'listMonth', // Set the default view to listMonth
+        initialView: 'listMonth', 
         views: {
             listMonth: {
                 buttonText: 'List View'
@@ -441,54 +406,48 @@ document.addEventListener('DOMContentLoaded', function() {
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,listMonth' // Add buttons for month and list views
+            right: 'dayGridMonth,listMonth' 
         },
-        events: [] // Start with no events
+        events: [] 
     });
 
     calendar.render();
 });
 
+// Function to redirect to the calendar view
 function redirectToCalendar(date) {
     calendar.gotoDate(date);
-    calendar.currentDateStr = date; // Store the date to be highlighted
+    calendar.currentDateStr = date; 
 }
 
+
+// Function to fetch equipment schedule
 function fetchEquipmentSchedule(equipmentName) {
     console.log('Fetching schedule for:', equipmentName);
-    fetch('static/sched.json') // Adjust URL to your JSON file location
+    fetch('static/sched.json') 
         .then(response => response.json())
         .then(allSchedules => {
-            // Filter schedules based on the equipment name, ignoring item number
             const schedules = allSchedules.filter(
                 s => s.Name.toLowerCase() === equipmentName.toLowerCase()
             );
 
             if (schedules.length > 0) {
                 console.log('Matching schedules found:', schedules);
-
-                // Clear existing events on the calendar
                 calendar.getEvents().forEach(event => event.remove());
-
-                // Loop through each schedule and add maintenance events to the calendar
                 schedules.forEach(schedule => {
                     const itemNumber = schedule["ItemNo"] ? schedule["ItemNo"] : '';
-
                     if (schedule.NextMaintenanceDate_MLR) {
                         calendar.addEvent({                       
-
                             title: `${equipmentName} ${itemNumber} ${schedule['MaintenanceType']} - MLR`,
                             start: schedule.NextMaintenanceDate_MLR
                         });
                     }
-
                     if (schedule.NextMaintenanceDate_KNN) {
                         calendar.addEvent({
                             title: `${equipmentName} ${itemNumber} ${schedule['MaintenanceType']} - KNN`,
                             start: schedule.NextMaintenanceDate_KNN
                         });
                     }
-
                     if (schedule.NextMaintenanceDate_SVR) {
                         calendar.addEvent({
                             title: `${equipmentName} ${itemNumber} ${schedule['MaintenanceType']} - SVR`,
@@ -496,8 +455,6 @@ function fetchEquipmentSchedule(equipmentName) {
                         });
                     }
                 });
-
-                // Redirect to the first available maintenance date if needed
                 redirectToCalendar(
                     schedules[0].NextMaintenanceDate_MLR ||
                     schedules[0].NextMaintenanceDate_KNN ||

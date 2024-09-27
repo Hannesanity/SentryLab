@@ -7,7 +7,7 @@
 <body>
     {% block content %}
     <!-- Sidebar -->
-    <div class="container-fluid">
+    <div class="container-fluid pl-0 pr-0">
         <div class="row">
             <!-- Sidebar -->
             <div id="mySidenav" class="sidenav">
@@ -22,10 +22,8 @@
              <!-- Main Content -->
             <div id="main" class="col-12">
                 <div class="header">
-                    <!-- Title on the left side -->
                     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>
-                    <!-- Placeholder icons on the right side -->
+                    <h1 class="header-title">Predictive Maintenance Dashboard</h1>                    
                     <div class="header-icons">
                       
                     </div>
@@ -43,8 +41,9 @@
                 </nav>
 
                                
-                <div class="row">
+                <div class="row">                    
                     <div class="col-4" id="dataAnalysis"> 
+                        <!-- Room Information table -->
                         <div class="infobox">
                             <table class="stats-table">
                                 <thead>
@@ -74,6 +73,7 @@
                             </table>  
                         </div>
                         
+                        <!-- Room Analysis table -->
                         <div class="infobox">
                             <table class="stats-table">
                                 <thead>
@@ -123,12 +123,14 @@
                             </table>
                         </div> 
                         
+                        <!-- Calendar -->
                         <div class="statbox">
                             <div id='calendar'></div>                            
-                        </div>                                                  
+                        </div>
+                                                                  
                     </div>                   
                     
-
+                    <!-- Room Charts -->
                     <div class="col-4">
                         <div class="col-12">
                             <div class="card equipcard">
@@ -158,34 +160,13 @@
                                         <canvas id="quarter1Chart"></canvas>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="card equipcard">
-                                    <div class="box" data-toggle="tooltip" title="Quarter 2 Chart: Analysis of equipment usage in the second quarter.">
-                                        <canvas id="quarter2Chart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card equipcard">
-                                    <div class="box" data-toggle="tooltip" title="Quarter 3 Chart: Analysis of equipment usage in the third quarter.">
-                                        <canvas id="quarter3Chart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="card equipcard">
-                                    <div class="box" data-toggle="tooltip" title="Quarter 4 Chart: Analysis of equipment usage in the fourth quarter.">
-                                        <canvas id="quarter4Chart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>                    
                     <!-- Usage Analysis Card -->
-                    <div class="col-4">                       
+                    <div class="col-4">                    
+                        <!-- Equipments List along with equipment information and statistics table -->   
                         <div class="statbox">
                             <h4 class="bold-text">Equipments List</h4>                            
                             <label for="inventory-select" data-toggle="tooltip" title="Select an equipment to view its statistics.">Equipment Name:</label>
@@ -298,9 +279,33 @@
                                     </tr>                                   
                                 </tbody>
                             </table>                                   
-                        </div>                                                
+                        </div>  
+                                                                      
                     </div>
                     
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card equipcard">
+                            <div class="box" data-toggle="tooltip" title="Quarter 2 Chart: Analysis of equipment usage in the second quarter.">
+                                <canvas id="quarter2Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>        
+                    <div class="col-4">
+                        <div class="card equipcard">
+                            <div class="box" data-toggle="tooltip" title="Quarter 3 Chart: Analysis of equipment usage in the third quarter.">
+                                <canvas id="quarter3Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card equipcard">
+                            <div class="box" data-toggle="tooltip" title="Quarter 4 Chart: Analysis of equipment usage in the fourth quarter.">
+                                <canvas id="quarter4Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 
